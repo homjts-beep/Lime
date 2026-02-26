@@ -1379,12 +1379,50 @@ function m1result(){
   document.getElementById('m1res').classList.add('on');
   document.getElementById('mb1').scrollTop=0
 }
+// ★ Google Apps Script 웹앱 URL (설정 후 여기에 붙여넣기)
+const GAS_URL =https://script.google.com/macros/library/d/16vMkUqOxuUaabobM9xHQbMwWjX-S_WH6MHlROUUVzH8R6UJAG289MTaa/2
+
 function m1sub(){
-  if(!document.getElementById('m1name').value.trim()){alert('이름을 입력해 주세요');return}
-  if(document.getElementById('m1phone').value.length<12){alert('연락처를 정확히 입력해 주세요');return}
-  document.getElementById('m1res').classList.remove('on');
-  document.getElementById('m1done').classList.add('on');
-  document.getElementById('mb1').scrollTop=0
+  const name  = document.getElementById('m1name').value.trim();
+  const phone = document.getElementById('m1phone').value.trim();
+  if(!name){alert('이름을 입력해 주세요');return}
+  if(phone.length<12){alert('연락처를 정확히 입력해 주세요');return}
+
+  // 선택 항목 수집
+  const step1 = document.querySelector('#m1s0 .mopt.on .mtx')?.textContent.trim() || '-';
+  const step2 = [...document.querySelectorAll('#m1s1 .mopt.on .mtx')].map(e=>e.textContent.trim()).join(', ') || '-';
+  const step3 = document.querySelector('#m1s2 .mopt.on .mtx')?.textContent.trim() || '-';
+  const step4 = document.querySelector('#m1s3 .mopt.on .mtx')?.textContent.trim() || '-';
+  const step5 = document.querySelector('#m1s4 .mopt.on .mtx')?.textContent.trim() || '-';
+
+  // 버튼 로딩 상태
+  const btn = document.querySelector('#m1res .msbtn');
+  btn.textContent = '전송 중...';
+  btn.disabled = true;
+
+  // Apps Script로 전송
+  fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      type: '30초 교통사고 무료 진단',
+      name, phone,
+      step1, step2, step3, step4, step5,
+      time: new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'})
+    })
+  })
+  .then(()=>{
+    document.getElementById('m1res').classList.remove('on');
+    document.getElementById('m1done').classList.add('on');
+    document.getElementById('mb1').scrollTop=0;
+  })
+  .catch(()=>{
+    // 전송 실패해도 완료 화면은 보여줌
+    document.getElementById('m1res').classList.remove('on');
+    document.getElementById('m1done').classList.add('on');
+    document.getElementById('mb1').scrollTop=0;
+  });
 }
 
 // 모달2 - 12대 중과실
