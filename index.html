@@ -155,6 +155,8 @@ nav a:hover { color: var(--lime); }
   text-decoration: none;
   transition: all 0.25s;
   cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .action-card:hover {
@@ -750,7 +752,7 @@ footer {
         <div class="action-arrow">→</div>
       </a>
 
-      <button class="action-card" onclick="mOpen('ov1')" style="background:var(--card);border:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;color:var(--text);cursor:pointer;">
+      <button class="action-card" onclick="mOpen('ov1')" style="width:100%;background:var(--card);border:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;color:var(--text);cursor:pointer;text-align:left;">
         <div class="action-icon" style="background:rgba(200,241,53,0.15)">🚗</div>
         <div class="action-text">
           <div class="action-title">30초 교통사고 무료 진단</div>
