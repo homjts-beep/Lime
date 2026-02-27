@@ -179,6 +179,23 @@ nav a:hover { color: var(--lime); }
 .action-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
 .action-arrow { color: var(--lime); font-size: 20px; flex-shrink: 0; }
 
+.unified-btn {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(200,241,53,0.1), rgba(200,241,53,0.03));
+  border: 1px solid rgba(200,241,53,0.3) !important;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.unified-btn:hover {
+  background: linear-gradient(135deg, rgba(200,241,53,0.16), rgba(200,241,53,0.06)) !important;
+  border-color: rgba(200,241,53,0.55) !important;
+  transform: translateX(6px);
+}
+
 .hero-right {
   background: var(--dark2);
   border-left: 1px solid var(--border);
@@ -741,22 +758,46 @@ footer {
       라임이 놓친 금액까지 찾아드립니다.
     </p>
     <div class="hero-actions">
-      <button class="action-card" onclick="mOpen('ov3')" style="width:100%;background:var(--card);border:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;color:var(--text);cursor:pointer;text-align:left;">
-        <div class="action-icon">🔍</div>
+      <!-- 버튼 1: 30초 무료 진단 -->
+      <button class="action-card unified-btn" onclick="mOpen('ov3')">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);"></div>
+        <div class="action-icon" style="background:rgba(200,241,53,0.2);">🔍</div>
         <div class="action-text">
-          <div class="action-title">30초 무료 진단받기</div>
+          <div class="action-title" style="color:var(--lime);">30초 무료 진단받기</div>
           <div class="action-desc">부위 선택만 하면 예상 보험금 즉시 확인</div>
         </div>
-        <div class="action-arrow">→</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+          <span style="background:var(--lime);color:var(--dark);font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;">무료진단</span>
+          <span style="color:var(--lime);font-size:20px;">→</span>
+        </div>
       </button>
 
-      <button class="action-card" onclick="mOpen('ov1')" style="background:var(--card);border:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;color:var(--text);cursor:pointer;">
-        <div class="action-icon" style="background:rgba(200,241,53,0.15)">🚗</div>
+      <!-- 버튼 2: 교통사고 무료 진단 -->
+      <button class="action-card unified-btn" onclick="mOpen('ov1')">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);"></div>
+        <div class="action-icon" style="background:rgba(200,241,53,0.2);">🚗</div>
         <div class="action-text">
-          <div class="action-title">30초 교통사고 무료 진단</div>
+          <div class="action-title" style="color:var(--lime);">30초 교통사고 무료 진단</div>
           <div class="action-desc">사고 유형 선택만으로 예상 합의금·과실 즉시 확인</div>
         </div>
-        <div class="action-arrow">→</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+          <span style="background:var(--lime);color:var(--dark);font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;">무료진단</span>
+          <span style="color:var(--lime);font-size:20px;">→</span>
+        </div>
+      </button>
+
+      <!-- 버튼 3: 보험가입·리모델링 -->
+      <button class="action-card unified-btn" onclick="mOpen('ins-modal')">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);"></div>
+        <div class="action-icon" style="background:rgba(200,241,53,0.2);">🛡️</div>
+        <div class="action-text">
+          <div class="action-title" style="color:var(--lime);">보험가입 · 보험 리모델링</div>
+          <div class="action-desc">지금 보험료, 제대로 내고 계신가요? 전문가가 무료 분석해 드립니다</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+          <span style="background:var(--lime);color:var(--dark);font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;">무료분석</span>
+          <span style="color:var(--lime);font-size:20px;">→</span>
+        </div>
       </button>
 
       <a class="action-card" href="http://pf.kakao.com/_QImIX/chat" target="_blank">
@@ -1352,8 +1393,16 @@ footer {
 <!-- ══════════════════ 진단 모달 JS ══════════════════ -->
 <script>
 // 공통
-function mOpen(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden'}
-function mClose(id){document.getElementById(id).classList.remove('on');document.body.style.overflow=''}
+function mOpen(id){
+  var el=document.getElementById(id);
+  if(id==='ins-modal'){el.style.display='block';document.body.style.overflow='hidden';}
+  else{el.classList.add('on');document.body.style.overflow='hidden';}
+}
+function mClose(id){
+  var el=document.getElementById(id);
+  if(id==='ins-modal'){el.style.display='none';document.body.style.overflow='';}
+  else{el.classList.remove('on');document.body.style.overflow='';}
+}
 function mPhone(el){let v=el.value.replace(/\D/g,'');if(v.length<=3)el.value=v;else if(v.length<=7)el.value=v.slice(0,3)+'-'+v.slice(3);else el.value=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11)}
 
 // 모달1 - 교통사고
@@ -1800,6 +1849,242 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
  </div><!-- /mbox -->
 </div><!-- /ov3 -->
+
+<!-- ══ 보험 모달 ══ -->
+<div class="modal-overlay" id="ins-modal" onclick="if(event.target===this)mClose('ins-modal')" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9000;overflow-y:auto;padding:24px 16px;">
+  <div style="max-width:520px;margin:0 auto;background:#1a1e19;border:1px solid rgba(200,241,53,0.2);border-radius:24px;overflow:hidden;position:relative;">
+    <!-- 헤더 -->
+    <div style="background:linear-gradient(135deg,#1e251c,#151a14);padding:32px 32px 24px;border-bottom:1px solid rgba(200,241,53,0.1);position:relative;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--lime),#a8d420);"></div>
+      <button onclick="mClose('ins-modal')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.06);border:none;color:#aaa;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div style="width:52px;height:52px;background:rgba(200,241,53,0.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;">🛡️</div>
+        <div>
+          <div style="font-size:11px;color:var(--lime);font-weight:700;letter-spacing:2px;margin-bottom:4px;">FREE ANALYSIS</div>
+          <div style="font-family:'Gmarket Sans',sans-serif;font-size:20px;font-weight:700;color:#fff;">보험가입 · 보험 리모델링</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#7d8c72;line-height:1.7;">지금 내는 보험료가 적절한지 전문가가 무료로 분석해 드립니다.<br>불필요한 중복 보장 제거 + 빠진 보장 보완까지 한번에!</p>
+    </div>
+
+    <!-- 진행바 -->
+    <div style="height:3px;background:rgba(255,255,255,0.06);">
+      <div id="ins-prog" style="height:100%;background:var(--lime);width:0%;transition:width 0.4s;"></div>
+    </div>
+
+    <!-- 슬라이드 래퍼 -->
+    <div id="ins-wrap" style="padding:28px 32px 32px;min-height:320px;">
+
+      <!-- STEP 1: 목적 -->
+      <div class="ins-slide active" id="ins-s1">
+        <div style="font-size:11px;color:var(--lime);font-weight:700;letter-spacing:1.5px;margin-bottom:10px;">STEP 1 / 5</div>
+        <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px;">상담 목적을 선택해 주세요</div>
+        <div style="font-size:13px;color:#7d8c72;margin-bottom:22px;">해당하는 항목을 선택하시면 맞춤 상담이 진행됩니다</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button class="ins-choice" onclick="insSelect(this,'purpose','new');insGo('ins-s2')">
+            <span style="font-size:20px;">🆕</span>
+            <div><div style="font-weight:700;color:#fff;font-size:14px;">신규 보험 가입</div><div style="font-size:12px;color:#7d8c72;margin-top:2px;">처음 보험을 알아보고 있어요</div></div>
+            <span style="color:var(--lime);margin-left:auto;font-size:18px;">›</span>
+          </button>
+          <button class="ins-choice" onclick="insSelect(this,'purpose','remodel');insGo('ins-s2')">
+            <span style="font-size:20px;">🔄</span>
+            <div><div style="font-weight:700;color:#fff;font-size:14px;">보험 리모델링</div><div style="font-size:12px;color:#7d8c72;margin-top:2px;">기존 보험 점검·정리가 필요해요</div></div>
+            <span style="color:var(--lime);margin-left:auto;font-size:18px;">›</span>
+          </button>
+          <button class="ins-choice" onclick="insSelect(this,'purpose','both');insGo('ins-s2')">
+            <span style="font-size:20px;">📋</span>
+            <div><div style="font-weight:700;color:#fff;font-size:14px;">가입 + 리모델링 모두</div><div style="font-size:12px;color:#7d8c72;margin-top:2px;">전체적으로 다 검토받고 싶어요</div></div>
+            <span style="background:var(--lime);color:#111;font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;margin-left:auto;white-space:nowrap;">추천</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: 연령대 -->
+      <div class="ins-slide" id="ins-s2">
+        <div style="font-size:11px;color:var(--lime);font-weight:700;letter-spacing:1.5px;margin-bottom:10px;">STEP 2 / 5</div>
+        <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px;">연령대를 선택해 주세요</div>
+        <div style="font-size:13px;color:#7d8c72;margin-bottom:22px;">연령대별 최적 보장 설계를 안내해 드립니다</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <button class="ins-choice-sm" onclick="insSelect(this,'age','20s');insGo('ins-s3')">20대</button>
+          <button class="ins-choice-sm" onclick="insSelect(this,'age','30s');insGo('ins-s3')">30대</button>
+          <button class="ins-choice-sm" onclick="insSelect(this,'age','40s');insGo('ins-s3')">40대</button>
+          <button class="ins-choice-sm" onclick="insSelect(this,'age','50s');insGo('ins-s3')">50대</button>
+          <button class="ins-choice-sm" onclick="insSelect(this,'age','60s');insGo('ins-s3')">60대</button>
+          <button class="ins-choice-sm" onclick="insSelect(this,'age','70+');insGo('ins-s3')">70대 이상</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: 관심 보장 -->
+      <div class="ins-slide" id="ins-s3">
+        <div style="font-size:11px;color:var(--lime);font-weight:700;letter-spacing:1.5px;margin-bottom:10px;">STEP 3 / 5</div>
+        <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px;">관심 있는 보장을 선택해 주세요</div>
+        <div style="font-size:13px;color:#7d8c72;margin-bottom:22px;">복수 선택 가능 · 선택 후 다음 버튼을 눌러주세요</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;" id="ins-cover-grid">
+          <button class="ins-tag-btn" onclick="insToggleTag(this,'cancer')">🎗 암 진단비</button>
+          <button class="ins-tag-btn" onclick="insToggleTag(this,'heart')">❤️ 뇌·심장</button>
+          <button class="ins-tag-btn" onclick="insToggleTag(this,'real')">🏥 실손보험</button>
+          <button class="ins-tag-btn" onclick="insToggleTag(this,'injury')">🦴 상해·골절</button>
+          <button class="ins-tag-btn" onclick="insToggleTag(this,'pension')">📅 연금·저축</button>
+          <button class="ins-tag-btn" onclick="insToggleTag(this,'life')">👨‍👩‍👧 종신·사망</button>
+          <button class="ins-tag-btn" onclick="insToggleTag(this,'dement')">🧠 치매·간병</button>
+          <button class="ins-tag-btn" onclick="insToggleTag(this,'child')">👶 어린이보험</button>
+        </div>
+        <button onclick="insGo('ins-s4')" style="width:100%;background:var(--lime);color:#111;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">다음 →</button>
+      </div>
+
+      <!-- STEP 4: 현재 납입액 -->
+      <div class="ins-slide" id="ins-s4">
+        <div style="font-size:11px;color:var(--lime);font-weight:700;letter-spacing:1.5px;margin-bottom:10px;">STEP 4 / 5</div>
+        <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px;">현재 월 보험료는 얼마인가요?</div>
+        <div style="font-size:13px;color:#7d8c72;margin-bottom:22px;">리모델링 시 절감 가능 금액 계산에 활용됩니다</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button class="ins-choice" onclick="insSelect(this,'premium','under5');insGo('ins-s5')"><span>💰</span><div><div style="font-weight:700;color:#fff;font-size:14px;">5만원 미만</div></div><span style="color:var(--lime);margin-left:auto;">›</span></button>
+          <button class="ins-choice" onclick="insSelect(this,'premium','5to15');insGo('ins-s5')"><span>💰</span><div><div style="font-weight:700;color:#fff;font-size:14px;">5 ~ 15만원</div></div><span style="color:var(--lime);margin-left:auto;">›</span></button>
+          <button class="ins-choice" onclick="insSelect(this,'premium','15to30');insGo('ins-s5')"><span>💰</span><div><div style="font-weight:700;color:#fff;font-size:14px;">15 ~ 30만원</div></div><span style="color:var(--lime);margin-left:auto;">›</span></button>
+          <button class="ins-choice" onclick="insSelect(this,'premium','over30');insGo('ins-s5')"><span>💰</span><div><div style="font-weight:700;color:#fff;font-size:14px;">30만원 이상</div></div><span style="color:var(--lime);margin-left:auto;">›</span></button>
+          <button class="ins-choice" onclick="insSelect(this,'premium','none');insGo('ins-s5')"><span>❓</span><div><div style="font-weight:700;color:#fff;font-size:14px;">없음 / 모름</div></div><span style="color:var(--lime);margin-left:auto;">›</span></button>
+        </div>
+      </div>
+
+      <!-- STEP 5: 연락처 -->
+      <div class="ins-slide" id="ins-s5">
+        <div style="font-size:11px;color:var(--lime);font-weight:700;letter-spacing:1.5px;margin-bottom:10px;">STEP 5 / 5</div>
+        <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px;">상담 결과를 받아보실 정보를 입력해 주세요</div>
+        <div style="background:rgba(200,241,53,0.07);border:1px solid rgba(200,241,53,0.15);border-radius:10px;padding:12px 14px;font-size:12px;color:#7d8c72;margin-bottom:20px;">🔒 개인정보는 상담 목적으로만 사용되며 외부 제공 없음</div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;color:#7d8c72;font-weight:700;display:block;margin-bottom:6px;">이름</label>
+          <input id="ins-name" type="text" placeholder="홍길동" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:13px 16px;font-size:15px;color:#fff;font-family:'Noto Sans KR',sans-serif;outline:none;" />
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;color:#7d8c72;font-weight:700;display:block;margin-bottom:6px;">연락처</label>
+          <input id="ins-phone" type="tel" placeholder="010-0000-0000" oninput="insFormatPhone(this)" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:13px 16px;font-size:15px;color:#fff;font-family:'Noto Sans KR',sans-serif;outline:none;" />
+        </div>
+        <button onclick="insSubmit()" style="width:100%;background:var(--lime);color:#111;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:4px;">무료 분석 신청하기 🛡️</button>
+      </div>
+
+      <!-- STEP 결과 -->
+      <div class="ins-slide" id="ins-result">
+        <div style="text-align:center;padding:20px 0;">
+          <div style="font-size:56px;margin-bottom:12px;">✅</div>
+          <div style="font-family:'Gmarket Sans',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px;">신청 완료!</div>
+          <div style="font-size:14px;color:#7d8c72;line-height:1.8;margin-bottom:24px;">전문 상담사가 <strong style="color:var(--lime)">24시간 이내</strong>에<br>맞춤 보험 분석 결과를 안내해 드립니다</div>
+          <div id="ins-result-summary" style="background:rgba(200,241,53,0.07);border:1px solid rgba(200,241,53,0.2);border-radius:14px;padding:16px 20px;text-align:left;margin-bottom:20px;font-size:13px;color:#aaa;line-height:2;"></div>
+          <a href="http://pf.kakao.com/_QImIX/chat" target="_blank" style="display:block;background:#FEE500;color:#111;border-radius:12px;padding:14px;font-size:15px;font-weight:800;text-decoration:none;margin-bottom:10px;font-family:'Noto Sans KR',sans-serif;">💬 카카오로 빠른 상담받기</a>
+          <button onclick="insReset()" style="width:100%;background:transparent;border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px;font-size:14px;color:#7d8c72;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">↺ 다시 입력하기</button>
+        </div>
+      </div>
+
+    </div><!-- /ins-wrap -->
+  </div>
+</div>
+
+<style>
+.ins-slide { display:none; }
+.ins-slide.active { display:block; }
+.ins-choice {
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  border-radius:12px;padding:14px 16px;cursor:pointer;
+  width:100%;font-family:'Noto Sans KR',sans-serif;
+  transition:all 0.2s;text-align:left;
+}
+.ins-choice:hover,.ins-choice.sel {
+  background:rgba(200,241,53,0.1);border-color:rgba(200,241,53,0.4);
+}
+.ins-choice-sm {
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  border-radius:10px;padding:14px 10px;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:700;color:#fff;
+  transition:all 0.2s;
+}
+.ins-choice-sm:hover,.ins-choice-sm.sel {
+  background:rgba(200,241,53,0.12);border-color:rgba(200,241,53,0.5);color:var(--lime);
+}
+.ins-tag-btn {
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  border-radius:10px;padding:12px 10px;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:600;color:#bbb;
+  transition:all 0.2s;
+}
+.ins-tag-btn.sel {
+  background:rgba(200,241,53,0.15);border-color:rgba(200,241,53,0.5);color:var(--lime);font-weight:800;
+}
+</style>
+
+<script>
+// ── 보험 모달 로직 ──
+var insState = { purpose:'', age:'', covers:[], premium:'', name:'', phone:'' };
+var insCoverLabels = { cancer:'암 진단비', heart:'뇌·심장', real:'실손보험', injury:'상해·골절', pension:'연금·저축', life:'종신·사망', dement:'치매·간병', child:'어린이보험' };
+
+function insGo(id) {
+  document.querySelectorAll('.ins-slide').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  var steps = {ins_s1:1,'ins-s1':1,'ins-s2':2,'ins-s3':3,'ins-s4':4,'ins-s5':5,'ins-result':5};
+  document.getElementById('ins-prog').style.width = ((steps[id]||1)/5*100)+'%';
+  document.getElementById('ins-wrap').scrollTop = 0;
+}
+function insSelect(el, key, val) {
+  insState[key] = val;
+  var parent = el.parentElement;
+  parent.querySelectorAll('.ins-choice, .ins-choice-sm').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');
+}
+function insToggleTag(el, key) {
+  el.classList.toggle('sel');
+  var idx = insState.covers.indexOf(key);
+  if(idx>-1) insState.covers.splice(idx,1); else insState.covers.push(key);
+}
+function insFormatPhone(input) {
+  var v=input.value.replace(/[^0-9]/g,'');
+  if(v.length>11)v=v.slice(0,11);
+  if(v.length>=8)v=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7);
+  else if(v.length>=4)v=v.slice(0,3)+'-'+v.slice(3);
+  input.value=v;
+}
+function insSubmit() {
+  var name = document.getElementById('ins-name').value.trim();
+  var phone = document.getElementById('ins-phone').value.trim();
+  if(!name){alert('이름을 입력해 주세요');return;}
+  if(phone.length<12){alert('연락처를 올바르게 입력해 주세요');return;}
+  insState.name = name; insState.phone = phone;
+
+  var purposeMap = {new:'신규 보험 가입',remodel:'보험 리모델링',both:'가입+리모델링 모두'};
+  var ageMap = {'20s':'20대','30s':'30대','40s':'40대','50s':'50대','60s':'60대','70+':'70대 이상'};
+  var premiumMap = {under5:'5만원 미만','5to15':'5~15만원','15to30':'15~30만원',over30:'30만원 이상',none:'없음/모름'};
+  var coverText = insState.covers.map(function(c){return insCoverLabels[c]||c;}).join(', ') || '미선택';
+
+  var summaryLines = [
+    '📌 상담 목적: ' + (purposeMap[insState.purpose]||'-'),
+    '👤 연령대: ' + (ageMap[insState.age]||'-'),
+    '🛡 관심 보장: ' + coverText,
+    '💰 현재 월 보험료: ' + (premiumMap[insState.premium]||'-'),
+    '📞 연락처: ' + phone.slice(0,7)+'-****'
+  ];
+  document.getElementById('ins-result-summary').innerHTML = summaryLines.join('<br>');
+
+  // GAS 웹훅 전송 (GAS에서 homjts@gmail.com으로 이메일 발송)
+  sendToGAS({
+    name: name, phone: phone,
+    step1: purposeMap[insState.purpose]||'-',
+    step2: ageMap[insState.age]||'-',
+    step3: coverText,
+    step4: premiumMap[insState.premium]||'-',
+    step5: '-',
+    type: '보험가입·리모델링 상담신청',
+    time: new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})
+  });
+
+  insGo('ins-result');
+}
+
+function insReset() {
+  insState = { purpose:'', age:'', covers:[], premium:'', name:'', phone:'' };
+  document.getElementById('ins-name').value='';
+  document.getElementById('ins-phone').value='';
+  document.querySelectorAll('.ins-choice,.ins-choice-sm,.ins-tag-btn').forEach(function(b){b.classList.remove('sel');});
+  insGo('ins-s1');
+}
+</script>
 
 <script>
 // ── 진단 폼 로직 (모달3) ──
