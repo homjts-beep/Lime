@@ -155,8 +155,6 @@ nav a:hover { color: var(--lime); }
   text-decoration: none;
   transition: all 0.25s;
   cursor: pointer;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .action-card:hover {
@@ -752,7 +750,7 @@ footer {
         <div class="action-arrow">→</div>
       </a>
 
-      <button class="action-card" onclick="mOpen('ov1')" style="width:100%;background:var(--card);border:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;color:var(--text);cursor:pointer;text-align:left;">
+      <button class="action-card" onclick="mOpen('ov1')" style="background:var(--card);border:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;color:var(--text);cursor:pointer;">
         <div class="action-icon" style="background:rgba(200,241,53,0.15)">🚗</div>
         <div class="action-text">
           <div class="action-title">30초 교통사고 무료 진단</div>
@@ -1254,8 +1252,10 @@ footer {
   <div class="mdone" id="m1done">
     <div class="mdone-ic">✅</div>
     <div class="mdone-title">상담 신청이 완료되었습니다!</div>
-    <div class="mdone-desc">담당 손해사정사가 <strong style="color:var(--lime)">1 영업일 이내</strong>에 연락드립니다.</div>
-    <a class="mkk" href="http://pf.kakao.com/_QImIX/chat" target="_blank">💬 카카오로 바로 상담하기</a>
+    <div class="mdone-desc">담당 손해사정사가 <strong style="color:var(--lime)">1 영업일 이내</strong>에 연락드립니다.<br><br>아래 버튼을 눌러 상담 내용을 카카오로 바로 전달하세요!</div>
+    <a class="mkk" id="m1kakaoBtn" href="http://pf.kakao.com/_QImIX/chat" target="_blank" style="margin-top:20px;display:inline-flex;">💬 카카오로 상담 내용 전달하기</a>
+    <div style="background:#1a1f14;border:1px solid rgba(200,241,53,0.15);border-radius:10px;padding:14px;margin-top:14px;font-size:12px;color:#8a9a7a;line-height:1.8;text-align:left" id="m1msgPreview"></div>
+    <div style="font-size:11px;color:#4a5a3a;margin-top:8px;text-align:center;line-height:1.6">💡 버튼 클릭 시 위 내용이 자동 복사됩니다<br>카카오 채팅창에서 붙여넣기(길게 누르기)해 주세요</div>
   </div>
  </div>
 </div>
@@ -1382,7 +1382,7 @@ function m1result(){
   document.getElementById('mb1').scrollTop=0
 }
 // ★ Google Apps Script 웹앱 URL (설정 후 여기에 붙여넣기)
-const GAS_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzcmvff7GynUyi1KflbVnHk0llQQ7AsABaDT4Al66SpA0gWm9wXRzqFI6OZUrmm1isy8A/exec';
 
 function m1sub(){
   const name  = document.getElementById('m1name').value.trim();
@@ -1396,6 +1396,26 @@ function m1sub(){
   const step3 = document.querySelector('#m1s2 .mopt.on .mtx')?.textContent.trim() || '-';
   const step4 = document.querySelector('#m1s3 .mopt.on .mtx')?.textContent.trim() || '-';
   const step5 = document.querySelector('#m1s4 .mopt.on .mtx')?.textContent.trim() || '-';
+
+  // 카카오로 전달할 메시지 생성
+  const kakaoMsg = '[라임손해사정사 상담신청]\n──────────────────\n👤 이름: '+name+'\n📞 연락처: '+phone+'\n──────────────────\n🚗 사고유형: '+step1+'\n🩹 부상정도: '+step2+'\n🏥 치료여부: '+step3+'\n⚖️ 과실비율: '+step4+'\n💼 직업군: '+step5+'\n──────────────────\n교통사고 무료 진단 상담 신청드립니다.';
+
+  // 클립보드에 복사
+  try { navigator.clipboard.writeText(kakaoMsg); } catch(e) {}
+
+  // 미리보기 표시
+  const preview = document.getElementById('m1msgPreview');
+  if(preview) preview.innerHTML = kakaoMsg.replace(/\n/g,'<br>');
+
+  // 카카오 버튼에 메시지 파라미터 설정 (카카오 오픈채팅은 직접 텍스트 전달 불가, 클립보드 방식 사용)
+  const kakaoBtn = document.getElementById('m1kakaoBtn');
+  if(kakaoBtn){
+    kakaoBtn.onclick = function(){
+      navigator.clipboard.writeText(kakaoMsg).then(()=>{
+        // 복사 완료 후 카카오 열기
+      }).catch(()=>{});
+    };
+  }
 
   // 버튼 로딩 상태
   const btn = document.querySelector('#m1res .msbtn');
@@ -1420,7 +1440,6 @@ function m1sub(){
     document.getElementById('mb1').scrollTop=0;
   })
   .catch(()=>{
-    // 전송 실패해도 완료 화면은 보여줌
     document.getElementById('m1res').classList.remove('on');
     document.getElementById('m1done').classList.add('on');
     document.getElementById('mb1').scrollTop=0;
