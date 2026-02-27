@@ -1380,11 +1380,24 @@ function m1result(){
   document.getElementById('mb1').scrollTop=0
 }
 function m1sub(){
-  if(!document.getElementById('m1name').value.trim()){alert('이름을 입력해 주세요');return}
-  if(document.getElementById('m1phone').value.length<12){alert('연락처를 정확히 입력해 주세요');return}
+  var name=document.getElementById('m1name').value.trim();
+  var phone=document.getElementById('m1phone').value.trim();
+  if(!name){alert('이름을 입력해 주세요');return}
+  if(phone.length<12){alert('연락처를 정확히 입력해 주세요');return}
+  var step1=(document.querySelector('#m1s0 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step2=(document.querySelector('#m1s1 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step3=(document.querySelector('#m1s2 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step4=Array.from(document.querySelectorAll('#m1s3 .mopt.on .mtx')).map(function(e){return e.textContent.trim();}).join(', ')||'-';
+  var step5=(document.querySelector('#m1s4 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  sendToGAS({
+    유형:'30초 교통사고 무료 진단',
+    이름:name, 연락처:phone,
+    'STEP1_사고유형':step1,'STEP2_수술입원':step2,'STEP3_합의여부':step3,
+    'STEP4_보험종류':step4,'STEP5_직업':step5
+  });
   document.getElementById('m1res').classList.remove('on');
   document.getElementById('m1done').classList.add('on');
-  document.getElementById('mb1').scrollTop=0
+  document.getElementById('mb1').scrollTop=0;
 }
 
 // 모달2 - 12대 중과실
@@ -1398,12 +1411,24 @@ function m2go(to){
   document.getElementById('mb2').scrollTop=0
 }
 function m2sub(){
-  if(!document.getElementById('m2name').value.trim()){alert('이름을 입력해 주세요');return}
-  if(document.getElementById('m2phone').value.length<12){alert('연락처를 정확히 입력해 주세요');return}
+  var name=document.getElementById('m2name').value.trim();
+  var phone=document.getElementById('m2phone').value.trim();
+  if(!name){alert('이름을 입력해 주세요');return}
+  if(phone.length<12){alert('연락처를 정확히 입력해 주세요');return}
+  var step1=(document.querySelector('#m2s0 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step2=(document.querySelector('#m2s1 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step3=(document.querySelector('#m2s2 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step4=Array.from(document.querySelectorAll('#m2s3 .mopt.on .mtx')).map(function(e){return e.textContent.trim();}).join(', ')||'-';
+  sendToGAS({
+    유형:'12대 중과실 사고 무료 진단',
+    이름:name, 연락처:phone,
+    'STEP1_중과실유형':step1,'STEP2_부상정도':step2,'STEP3_합의여부':step3,
+    'STEP4_보험종류':step4
+  });
   document.getElementById('m2s4').classList.remove('on');
   document.getElementById('mp2').style.display='none';
   document.getElementById('m2done').classList.add('on');
-  document.getElementById('mb2').scrollTop=0
+  document.getElementById('mb2').scrollTop=0;
 }
 </script>
 
@@ -1439,138 +1464,452 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 <!-- ══════════════════ 모달 3: 30초 무료 진단받기 ══════════════════ -->
 <div class="mov" id="ov3" onclick="if(event.target.id==='ov3')mClose('ov3')">
- <div class="mbox" id="mb3">
-  <button class="mcx" onclick="mClose('ov3')">✕</button>
-  <div class="mbadge">🔍 보험금 전문 진단</div>
-  <div class="mtitle">30초 무료<br><span class="mg">보험금 진단 서비스</span></div>
-  <div class="mprog" id="mp3">
-    <div class="mpd mact" id="m3p0"></div>
-    <div class="mpd" id="m3p1"></div>
-    <div class="mpd" id="m3p2"></div>
-    <div class="mpd" id="m3p3"></div>
-    <div class="mpd" id="m3p4"></div>
-  </div>
-  <div class="mstep on" id="m3s0">
-    <div class="mlbl">STEP 1 / 5</div>
-    <div class="mq">청구할 보험 유형을 선택해 주세요</div>
-    <div class="mopts">
-      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">🦴</div><div class="mtx">척추·골절·압박골절</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">📌</div><div class="mtx">핀 고정·금속 내고정물 잔존</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">🦵</div><div class="mtx">관절·어깨·무릎 손상</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">🚗</div><div class="mtx">교통사고</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">🏥</div><div class="mtx">실손·입원비</div><div class="mchk"></div></div>
-    </div>
-    <button class="mnxt" id="m3n0" disabled onclick="m3go(1)">다음 단계 →</button>
-  </div>
-  <div class="mstep" id="m3s1">
-    <div class="mlbl">STEP 2 / 5</div>
-    <div class="mq">수술 또는 입원 여부</div>
-    <div class="mopts">
-      <div class="mopt" onclick="m3pick(this,1)"><div class="mic">🏥</div><div class="mtx">수술 받았음</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,1)"><div class="mic">🛏️</div><div class="mtx">입원만 했음</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,1)"><div class="mic">🚶</div><div class="mtx">통원 치료만 했음</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,1)"><div class="mic">⏳</div><div class="mtx">아직 치료 전</div><div class="mchk"></div></div>
-    </div>
-    <button class="mnxt" id="m3n1" disabled onclick="m3go(2)">다음 단계 →</button>
-  </div>
-  <div class="mstep" id="m3s2">
-    <div class="mlbl">STEP 3 / 5</div>
-    <div class="mq">보험금을 받은 적 있으신가요?</div>
-    <div class="mopts">
-      <div class="mopt" onclick="m3pick(this,2)"><div class="mic">✅</div><div class="mtx">이미 받았음 (추가 청구 검토)</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,2)"><div class="mic">🔍</div><div class="mtx">아직 청구 안 함</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,2)"><div class="mic">❌</div><div class="mtx">거절·삭감 당함</div><div class="mchk"></div></div>
-    </div>
-    <button class="mnxt" id="m3n2" disabled onclick="m3go(3)">다음 단계 →</button>
-  </div>
-  <div class="mstep" id="m3s3">
-    <div class="mlbl">STEP 4 / 5</div>
-    <div class="mq">가입한 보험 종류 <span class="mhint">(다중 선택 가능)</span></div>
-    <div class="mopts">
-      <div class="mopt" onclick="m3multi(this,3)"><div class="mic">🚗</div><div class="mtx">자동차보험</div><div class="mchk sq"></div></div>
-      <div class="mopt" onclick="m3multi(this,3)"><div class="mic">🏥</div><div class="mtx">실손보험</div><div class="mchk sq"></div></div>
-      <div class="mopt" onclick="m3multi(this,3)"><div class="mic">💊</div><div class="mtx">상해보험</div><div class="mchk sq"></div></div>
-      <div class="mopt" onclick="m3multi(this,3)"><div class="mic">❓</div><div class="mtx">잘 모름</div><div class="mchk sq"></div></div>
-    </div>
-    <button class="mnxt" id="m3n3" disabled onclick="m3go(4)">다음 단계 →</button>
-  </div>
-  <div class="mstep" id="m3s4">
-    <div class="mlbl">STEP 5 / 5</div>
-    <div class="mq">직업군 선택 <span class="mhint">(휴업손해 산정용)</span></div>
-    <div class="mopts">
-      <div class="mopt" onclick="m3pick(this,4)"><div class="mic">💼</div><div class="mtx">직장인</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,4)"><div class="mic">🏢</div><div class="mtx">사업자</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,4)"><div class="mic">🏠</div><div class="mtx">주부 · 학생 · 무직</div><div class="mchk"></div></div>
-      <div class="mopt" onclick="m3pick(this,4)"><div class="mic">❓</div><div class="mtx">기타</div><div class="mchk"></div></div>
-    </div>
-    <button class="mnxt" id="m3n4" disabled onclick="m3result()">결과 보기 →</button>
-  </div>
-  <div class="mres" id="m3res">
-    <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(200,241,53,0.12);border:1px solid rgba(200,241,53,0.3);border-radius:999px;padding:4px 12px;font-size:11px;color:var(--lime);font-weight:700;margin-bottom:12px">🔍 진단 완료</div>
-    <div style="font-family:'Gmarket Sans',sans-serif;font-size:19px;font-weight:700;color:#fff;line-height:1.4;margin-bottom:10px">놓친 보험금이 있을 가능성이<br><span style="color:var(--lime)">매우 높습니다</span></div>
-    <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px">선택하신 정보 분석 결과, 추가 청구 가능 항목이 발견되었습니다.</div>
-    <div class="mhbox"><p>고객님의 케이스는 <strong>보험사가 알려주지 않는 항목</strong>이 존재할 가능성이 높습니다.<br><br>전문가 검토 없이 마무리하실 경우 <strong>수백만 원 이상의 손실</strong>이 발생할 수 있습니다.</p></div>
-    <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">📞 무료 상담 신청</div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px">전담 손해사정사가 직접 연락드립니다. 착수금 없이 무료로 진행됩니다.</div>
-    <div class="mform">
-      <div><label class="mflbl">이름</label><input type="text" id="m3name" placeholder="홍길동"></div>
-      <div><label class="mflbl">연락처</label><input type="tel" id="m3phone" placeholder="010-0000-0000" oninput="mPhone(this)" maxlength="13"></div>
-      <button class="msbtn" onclick="m3sub()">맞춤 가이드라인 및 무료 상담 신청하기 →</button>
-      <div class="mprv">입력하신 정보는 무료 상담 목적으로만 활용되며, 외부에 제공되지 않습니다.</div>
-    </div>
-  </div>
-  <div class="mdone" id="m3done">
-    <div class="mdone-ic">✅</div>
-    <div class="mdone-title">상담 신청이 완료되었습니다!</div>
-    <div class="mdone-desc">담당 손해사정사가 <strong style="color:var(--lime)">1 영업일 이내</strong>에 연락드립니다.</div>
-    <a class="mkk" href="http://pf.kakao.com/_QImIX/chat" target="_blank">💬 카카오로 바로 상담하기</a>
-  </div>
- </div>
-</div>
+ <div class="mbox" id="mb3" style="max-width:580px;padding:0;overflow:hidden;background:#13131a;">
+  <button class="mcx" onclick="mClose('ov3')" style="position:absolute;top:14px;right:14px;z-index:200;">✕</button>
+
+  <!-- 진단 폼 iframe 방식 대신 직접 삽입 -->
+  <div id="diag-wrap" style="position:relative;width:100%;height:88vh;max-height:700px;overflow-y:auto;">
+
+    <style>
+      /* ── 진단 폼 전용 스타일 (모달 내부) ── */
+      #diag-wrap {
+        font-family: 'Noto Sans KR', sans-serif;
+        background: #0a0a0f;
+        color: #f0ece4;
+      }
+      #diag-wrap .d-progress-bar {
+        position: sticky;
+        top: 0; left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #c8a96e, #e8c98a);
+        transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+        z-index: 100;
+        box-shadow: 0 0 40px rgba(200,169,110,0.3);
+      }
+      #diag-wrap .d-header-badge {
+        text-align:center;
+        padding: 14px 0 4px;
+        font-size: 12px;
+        color: #c8a96e;
+        letter-spacing: 1px;
+        font-weight: 500;
+      }
+      #diag-wrap .d-container {
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        padding: 16px 20px 32px;
+      }
+      #diag-wrap .d-slide { display: none; animation: dSlideIn 0.4s ease; }
+      #diag-wrap .d-slide.active { display: block; }
+      @keyframes dSlideIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+      #diag-wrap .d-step-label { font-size:11px;color:#c8a96e;letter-spacing:2px;font-weight:700;margin-bottom:16px;text-transform:uppercase; }
+      #diag-wrap .d-highlight-badge { display:inline-block;background:rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.4);border-radius:6px;padding:2px 10px;font-size:12px;color:#e8c98a;margin-bottom:14px;font-weight:500; }
+      #diag-wrap .d-question { font-family:'Noto Serif KR',serif;font-size:clamp(20px,4.5vw,27px);font-weight:700;line-height:1.4;margin-bottom:8px;color:#f0ece4; }
+      #diag-wrap .d-sub-question { font-size:13px;color:#7a7a8e;margin-bottom:24px;line-height:1.6; }
+      #diag-wrap .d-choices { display:flex;flex-direction:column;gap:10px; }
+      #diag-wrap .d-choice-btn { background:#1c1c28;border:1.5px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px 18px;text-align:left;cursor:pointer;transition:all 0.25s ease;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;color:#f0ece4; }
+      #diag-wrap .d-choice-btn:hover { border-color:rgba(200,169,110,0.5);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 40px rgba(200,169,110,0.3); }
+      #diag-wrap .d-choice-btn.selected { border-color:#c8a96e;background:rgba(200,169,110,0.12); }
+      #diag-wrap .d-choice-icon { width:38px;height:38px;background:rgba(255,255,255,0.05);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0; }
+      #diag-wrap .d-choice-text { flex:1; }
+      #diag-wrap .d-choice-title { font-size:14px;font-weight:600;color:#f0ece4;margin-bottom:2px; }
+      #diag-wrap .d-choice-desc { font-size:12px;color:#7a7a8e; }
+      #diag-wrap .d-choice-tag { font-size:10px;background:rgba(200,169,110,0.2);color:#c8a96e;border-radius:100px;padding:3px 10px;font-weight:700;flex-shrink:0; }
+      #diag-wrap .d-info-box { background:rgba(78,205,196,0.08);border:1px solid rgba(78,205,196,0.2);border-radius:12px;padding:12px 14px;font-size:13px;color:rgba(78,205,196,0.9);margin-bottom:18px;display:flex;align-items:flex-start;gap:10px;line-height:1.5; }
+      #diag-wrap .d-input-group { margin-bottom:14px; }
+      #diag-wrap .d-input-label { font-size:12px;color:#7a7a8e;margin-bottom:7px;display:block;font-weight:500;letter-spacing:0.5px; }
+      #diag-wrap .d-form-input { width:100%;background:#1c1c28;border:1.5px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 16px;font-size:15px;color:#f0ece4;font-family:'Noto Sans KR',sans-serif;transition:border-color 0.25s;outline:none; }
+      #diag-wrap .d-form-input:focus { border-color:#c8a96e;box-shadow:0 0 0 3px rgba(200,169,110,0.1); }
+      #diag-wrap .d-form-input::placeholder { color:#7a7a8e; }
+      #diag-wrap .d-next-btn { display:inline-flex;align-items:center;gap:8px;background:transparent;border:1.5px solid rgba(200,169,110,0.4);border-radius:12px;padding:13px 24px;font-size:14px;font-weight:600;color:#c8a96e;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all 0.25s;margin-top:18px; }
+      #diag-wrap .d-next-btn:hover { background:rgba(200,169,110,0.1);border-color:#c8a96e;transform:translateY(-2px); }
+      #diag-wrap .d-cta-btn { width:100%;background:linear-gradient(135deg,#c8a96e,#e8c98a);border:none;border-radius:14px;padding:17px;font-size:16px;font-weight:700;color:#0a0a0f;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all 0.25s;letter-spacing:0.5px;margin-top:20px; }
+      #diag-wrap .d-cta-btn:hover { transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,169,110,0.4); }
+      #diag-wrap .d-score-card { background:#1c1c28;border:1px solid rgba(200,169,110,0.2);border-radius:18px;padding:22px;margin-bottom:18px; }
+      #diag-wrap .d-score-meter { background:rgba(255,255,255,0.05);border-radius:100px;height:8px;margin:14px 0;overflow:hidden; }
+      #diag-wrap .d-score-fill { height:100%;background:linear-gradient(90deg,#c8a96e,#e8c98a);border-radius:100px;transition:width 1s cubic-bezier(0.4,0,0.2,1); }
+      #diag-wrap .d-score-labels { display:flex;justify-content:space-between;font-size:11px;color:#7a7a8e; }
+      #diag-wrap .d-result-tags { display:flex;flex-wrap:wrap;gap:8px;margin-top:14px; }
+      #diag-wrap .d-result-tag { background:rgba(78,205,196,0.15);border:1px solid rgba(78,205,196,0.3);color:#4ecdc4;border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600; }
+      #diag-wrap .d-result-tag.gold { background:rgba(200,169,110,0.15);border-color:rgba(200,169,110,0.3);color:#e8c98a; }
+      #diag-wrap .d-result-header { text-align:center;margin-bottom:24px; }
+      #diag-wrap .d-result-icon { font-size:50px;margin-bottom:14px;display:block; }
+      #diag-wrap .d-result-score-big { font-family:'Noto Serif KR',serif;font-size:52px;font-weight:900;background:linear-gradient(135deg,#c8a96e,#e8c98a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:8px; }
+      #diag-wrap .d-result-label { font-size:17px;font-weight:700;color:#f0ece4;margin-bottom:5px; }
+      #diag-wrap .d-result-sublabel { font-size:13px;color:#7a7a8e; }
+      #diag-wrap .d-notification-sim { background:#1c1c28;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-top:18px;font-size:13px;position:relative;overflow:hidden; }
+      #diag-wrap .d-notification-sim::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#c8a96e,#e8c98a); }
+      #diag-wrap .d-noti-icon { font-size:26px;flex-shrink:0; }
+      #diag-wrap .d-noti-content { flex:1; }
+      #diag-wrap .d-noti-app { font-size:11px;color:#7a7a8e;font-weight:600;letter-spacing:1px;margin-bottom:4px; }
+      #diag-wrap .d-noti-text { color:#f0ece4;line-height:1.5; }
+      #diag-wrap .d-noti-text strong { color:#e8c98a; }
+      #diag-wrap .d-divider { display:flex;align-items:center;gap:12px;margin:22px 0;color:#7a7a8e;font-size:12px; }
+      #diag-wrap .d-divider::before, #diag-wrap .d-divider::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+      #diag-wrap .d-checklist { display:flex;flex-direction:column;gap:10px;margin-top:14px; }
+      #diag-wrap .d-check-item { display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(240,236,228,0.8); }
+      #diag-wrap .d-check-item::before { content:'✓';color:#4ecdc4;font-weight:700;font-size:14px;width:20px;flex-shrink:0; }
+      #diag-wrap .d-floating-counter { text-align:center;margin-top:18px;font-size:12px;color:#7a7a8e; }
+      #diag-wrap .d-floating-counter span { color:#c8a96e;font-weight:700; }
+    </style>
+
+    <div class="d-progress-bar" id="dProgressBar" style="width:14%"></div>
+    <div class="d-header-badge">🔒 무료 진단 · 30초 완성</div>
+
+    <div class="d-container">
+
+      <!-- SLIDE 1: 부위 선택 -->
+      <div class="d-slide active" id="dslide1">
+        <div class="d-step-label">STEP 1 / 6</div>
+        <div class="d-highlight-badge">⚡ 지금 즉시 진단 가능</div>
+        <div class="d-question">다친 부위가 어디인가요?</div>
+        <div class="d-sub-question">선택하시면 해당 부위 전용 질문으로 이동합니다</div>
+        <div class="d-choices">
+          <button class="d-choice-btn" onclick="dSelectBodyPart('spine')">
+            <div class="d-choice-icon">🦴</div>
+            <div class="d-choice-text"><div class="d-choice-title">척추 / 허리 / 목</div><div class="d-choice-desc">디스크, 압박골절, 경추 손상 등</div></div>
+            <div class="d-choice-tag">HIGH</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectBodyPart('pin')">
+            <div class="d-choice-icon">📌</div>
+            <div class="d-choice-text"><div class="d-choice-title">골절 + 핀 고정 수술</div><div class="d-choice-desc">금속 내고정, 나사 삽입 등</div></div>
+            <div class="d-choice-tag">VIP</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectBodyPart('joint')">
+            <div class="d-choice-icon">🦵</div>
+            <div class="d-choice-text"><div class="d-choice-title">관절 / 어깨 / 무릎</div><div class="d-choice-desc">인대 파열, 반월판 손상 등</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectBodyPart('other')">
+            <div class="d-choice-icon">🩺</div>
+            <div class="d-choice-text"><div class="d-choice-title">기타 부위</div><div class="d-choice-desc">두부, 흉부, 복부, 사지 등</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SLIDE 2A: 척추 전용 -->
+      <div class="d-slide" id="dslide2a">
+        <div class="d-step-label">STEP 2 / 6 · 척추 전용</div>
+        <div class="d-question">척추 압박 정도를 진단받으셨나요?</div>
+        <div class="d-sub-question">압박률은 보험금 산정의 핵심 기준입니다</div>
+        <div class="d-info-box">💡 압박률 20% 이상이면 후유장해 보험금 청구 가능성이 크게 높아집니다</div>
+        <div class="d-choices">
+          <button class="d-choice-btn" onclick="dSelectOption(this,'compression','40up',4);dGoTo('dslide3a')">
+            <div class="d-choice-icon">🔴</div>
+            <div class="d-choice-text"><div class="d-choice-title">40% 이상</div><div class="d-choice-desc">고등급 압박, 수술 가능성 높음</div></div>
+            <div class="d-choice-tag">최고 등급</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'compression','20to40',3);dGoTo('dslide3a')">
+            <div class="d-choice-icon">🟠</div>
+            <div class="d-choice-text"><div class="d-choice-title">20% ~ 40%</div><div class="d-choice-desc">중등도 압박</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'compression','under20',1);dGoTo('dslide3a')">
+            <div class="d-choice-icon">🟡</div>
+            <div class="d-choice-text"><div class="d-choice-title">20% 미만</div><div class="d-choice-desc">경미한 압박</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'compression','unknown',0);dGoTo('dslide3a')">
+            <div class="d-choice-icon">❓</div>
+            <div class="d-choice-text"><div class="d-choice-title">모르겠어요</div><div class="d-choice-desc">진단서 확인이 필요합니다</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SLIDE 2B: 핀 고정 전용 -->
+      <div class="d-slide" id="dslide2b">
+        <div class="d-step-label">STEP 2 / 6 · 핀 고정 전용</div>
+        <div class="d-question">핀 / 나사가 현재도 몸 안에 있나요?</div>
+        <div class="d-sub-question">핀이 체내에 잔존하는 경우 별도의 후유장해 항목이 적용됩니다</div>
+        <div class="d-info-box">⭐ 체내 금속 잔존 시 고액 보상 가능성이 높습니다. 많은 분들이 이 항목을 놓치십니다.</div>
+        <div class="d-choices">
+          <button class="d-choice-btn" onclick="dSelectOption(this,'pin_remain','yes',5);dGoTo('dslide3b')">
+            <div class="d-choice-icon">📌</div>
+            <div class="d-choice-text"><div class="d-choice-title">네, 현재도 체내에 있습니다</div><div class="d-choice-desc">제거하지 않은 상태</div></div>
+            <div class="d-choice-tag">⭐ 급행 대상</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'pin_remain','removed',2);dGoTo('dslide3b')">
+            <div class="d-choice-icon">✂️</div>
+            <div class="d-choice-text"><div class="d-choice-title">제거 수술을 받았습니다</div><div class="d-choice-desc">이미 제거 완료</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'pin_remain','unknown',1);dGoTo('dslide3b')">
+            <div class="d-choice-icon">❓</div>
+            <div class="d-choice-text"><div class="d-choice-title">잘 모르겠습니다</div><div class="d-choice-desc">수술 기록 확인 필요</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SLIDE 2C: 일반 -->
+      <div class="d-slide" id="dslide2c">
+        <div class="d-step-label">STEP 2 / 6</div>
+        <div class="d-question">치료 기간이 어떻게 되시나요?</div>
+        <div class="d-sub-question">입원 + 통원 치료를 합산해 주세요</div>
+        <div class="d-choices">
+          <button class="d-choice-btn" onclick="dSelectOption(this,'duration','6m+',4);dGoTo('dslide3c')">
+            <div class="d-choice-icon">📅</div>
+            <div class="d-choice-text"><div class="d-choice-title">6개월 이상</div><div class="d-choice-desc">장기 치료 중</div></div>
+            <div class="d-choice-tag">HIGH</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'duration','3to6m',3);dGoTo('dslide3c')">
+            <div class="d-choice-icon">📅</div>
+            <div class="d-choice-text"><div class="d-choice-title">3 ~ 6개월</div><div class="d-choice-desc">중기 치료</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'duration','1to3m',2);dGoTo('dslide3c')">
+            <div class="d-choice-icon">📅</div>
+            <div class="d-choice-text"><div class="d-choice-title">1 ~ 3개월</div><div class="d-choice-desc">단기 치료</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'duration','under1m',1);dGoTo('dslide3c')">
+            <div class="d-choice-icon">📅</div>
+            <div class="d-choice-text"><div class="d-choice-title">1개월 미만</div><div class="d-choice-desc">경미한 부상</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SLIDE 3A: 척추 - 수술 여부 -->
+      <div class="d-slide" id="dslide3a">
+        <div class="d-step-label">STEP 3 / 6 · 척추 전용</div>
+        <div class="d-question">수술을 받으셨나요?</div>
+        <div class="d-choices">
+          <button class="d-choice-btn" onclick="dSelectOption(this,'surgery','yes',3);dGoTo('dslide4')">
+            <div class="d-choice-icon">🏥</div>
+            <div class="d-choice-text"><div class="d-choice-title">네, 수술 받았습니다</div><div class="d-choice-desc">유합술, 디스크 제거 등</div></div>
+            <div class="d-choice-tag">가산</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'surgery','no',0);dGoTo('dslide4')">
+            <div class="d-choice-icon">💊</div>
+            <div class="d-choice-text"><div class="d-choice-title">아니요, 보존 치료 중</div><div class="d-choice-desc">물리치료, 약물 치료 등</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SLIDE 3B: 핀 - 골절 부위 수 -->
+      <div class="d-slide" id="dslide3b">
+        <div class="d-step-label">STEP 3 / 6 · 핀 고정 전용</div>
+        <div class="d-question">골절이 몇 군데인가요?</div>
+        <div class="d-sub-question">복합 골절의 경우 보험금이 중복 적용될 수 있습니다</div>
+        <div class="d-choices">
+          <button class="d-choice-btn" onclick="dSelectOption(this,'fracture_count','3+',4);dGoTo('dslide4')">
+            <div class="d-choice-icon">💥</div>
+            <div class="d-choice-text"><div class="d-choice-title">3곳 이상</div><div class="d-choice-desc">다발성 골절</div></div>
+            <div class="d-choice-tag">최고</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'fracture_count','2',2);dGoTo('dslide4')">
+            <div class="d-choice-icon">💢</div>
+            <div class="d-choice-text"><div class="d-choice-title">2곳</div><div class="d-choice-desc">복합 골절</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'fracture_count','1',1);dGoTo('dslide4')">
+            <div class="d-choice-icon">🩹</div>
+            <div class="d-choice-text"><div class="d-choice-title">1곳</div><div class="d-choice-desc">단순 골절</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SLIDE 3C: 기타 - 수술 여부 -->
+      <div class="d-slide" id="dslide3c">
+        <div class="d-step-label">STEP 3 / 6</div>
+        <div class="d-question">수술을 받으셨나요?</div>
+        <div class="d-choices">
+          <button class="d-choice-btn" onclick="dSelectOption(this,'surgery','yes',3);dGoTo('dslide4')">
+            <div class="d-choice-icon">🏥</div>
+            <div class="d-choice-text"><div class="d-choice-title">네, 수술 받았습니다</div></div>
+            <div class="d-choice-tag">가산</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'surgery','no',0);dGoTo('dslide4')">
+            <div class="d-choice-icon">💊</div>
+            <div class="d-choice-text"><div class="d-choice-title">아니요, 보존 치료 중</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: 보험 가입 여부 -->
+      <div class="d-slide" id="dslide4">
+        <div class="d-step-label">STEP 4 / 6</div>
+        <div class="d-question">가입된 실손/상해보험이 있으신가요?</div>
+        <div class="d-choices">
+          <button class="d-choice-btn" onclick="dSelectOption(this,'insurance','multi',3);dGoTo('dslide5')">
+            <div class="d-choice-icon">📋</div>
+            <div class="d-choice-text"><div class="d-choice-title">2개 이상 가입</div><div class="d-choice-desc">중복 청구 검토 가능</div></div>
+            <div class="d-choice-tag">최적</div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'insurance','one',2);dGoTo('dslide5')">
+            <div class="d-choice-icon">📄</div>
+            <div class="d-choice-text"><div class="d-choice-title">1개 가입</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'insurance','unknown',1);dGoTo('dslide5')">
+            <div class="d-choice-icon">❓</div>
+            <div class="d-choice-text"><div class="d-choice-title">잘 모릅니다</div><div class="d-choice-desc">조회 서비스 안내 가능</div></div>
+          </button>
+          <button class="d-choice-btn" onclick="dSelectOption(this,'insurance','none',0);dGoTo('dslide5')">
+            <div class="d-choice-icon">🚫</div>
+            <div class="d-choice-text"><div class="d-choice-title">없습니다</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: 연락처 입력 -->
+      <div class="d-slide" id="dslide5">
+        <div class="d-step-label">STEP 5 / 6</div>
+        <div class="d-question">진단 결과를 받아보실 연락처를 입력해 주세요</div>
+        <div class="d-sub-question">무료로 보험금 예상 금액을 안내해 드립니다</div>
+        <div class="d-info-box">🔒 개인정보는 상담 목적으로만 사용되며 외부에 제공되지 않습니다</div>
+        <div class="d-input-group">
+          <label class="d-input-label">이름</label>
+          <input type="text" class="d-form-input" id="dNameInput" placeholder="홍길동" />
+        </div>
+        <div class="d-input-group">
+          <label class="d-input-label">연락처</label>
+          <input type="tel" class="d-form-input" id="dPhoneInput" placeholder="010-0000-0000" oninput="dFormatPhone(this)" />
+        </div>
+        <button class="d-next-btn" onclick="dSubmitForm()">결과 확인하기 →</button>
+      </div>
+
+      <!-- SLIDE 6: 결과 -->
+      <div class="d-slide" id="dslide6">
+        <div class="d-step-label">STEP 6 / 6 · 진단 완료</div>
+        <div class="d-result-header">
+          <span class="d-result-icon" id="dResultIcon">⭐</span>
+          <div class="d-result-score-big" id="dResultScore">87</div>
+          <div class="d-result-label" id="dResultLabel">고액 보상 가능성 높음</div>
+          <div class="d-result-sublabel" id="dResultSublabel">상담 시 급행 처리 대상입니다</div>
+        </div>
+        <div class="d-score-card">
+          <div style="font-size:13px;color:#7a7a8e;font-weight:500;">보험금 수령 가능성 지수</div>
+          <div class="d-score-meter"><div class="d-score-fill" id="dScoreFill" style="width:0%"></div></div>
+          <div class="d-score-labels"><span>낮음</span><span>중간</span><span>높음</span></div>
+          <div class="d-result-tags" id="dResultTags"></div>
+        </div>
+        <div class="d-notification-sim" id="dNotificationSim">
+          <div class="d-noti-icon">💬</div>
+          <div class="d-noti-content">
+            <div class="d-noti-app">KAKAO TALK · 방금</div>
+            <div class="d-noti-text" id="dNotiText">새 상담 접수: <strong>홍길동 고객</strong> · 척추 압박골절 · <strong>급행 처리 대상</strong></div>
+          </div>
+        </div>
+        <button class="d-cta-btn" onclick="window.open('http://pf.kakao.com/_QImIX/chat','_blank')">💬 카카오로 바로 상담받기</button>
+        <div class="d-divider">상담사가 확인 후 연락드립니다</div>
+        <div class="d-checklist">
+          <div class="d-check-item">완전 무료 상담 / 착수금 없음</div>
+          <div class="d-check-item">진단서 분석 및 필요 서류 안내</div>
+          <div class="d-check-item">놓친 보험금 항목 무료 검토</div>
+          <div class="d-check-item">전문 보험사 청구 전략 1:1 안내</div>
+        </div>
+        <button class="d-next-btn" style="width:100%;justify-content:center;margin-top:10px;" onclick="dRestartForm()">↺ 다시 진단하기</button>
+        <div class="d-floating-counter">오늘 <span id="dTodayCount">147</span>명 진단 완료</div>
+      </div>
+
+    </div><!-- /d-container -->
+  </div><!-- /diag-wrap -->
+
+ </div><!-- /mbox -->
+</div><!-- /ov3 -->
 
 <script>
-// 모달3 - 보험금 진단 (30초 무료 진단받기)
-const GAS_URL3 = 'https://script.google.com/macros/s/AKfycbybx-XQLiRtNLghU_lO_barQqN7pYTmJAR_67TqNF4FiGo9MvC0lfUCTZRoYCzDDT-x/exec6';
-function mOpen(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden'}
-function mClose(id){document.getElementById(id).classList.remove('on');document.body.style.overflow=''}
-function mPhone(el){var v=el.value.replace(/\D/g,'');if(v.length<=3)el.value=v;else if(v.length<=7)el.value=v.slice(0,3)+'-'+v.slice(3);else el.value=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11)}
-function m3pick(el,i){el.closest('.mopts').querySelectorAll('.mopt').forEach(function(o){o.classList.remove('on')});el.classList.add('on');document.getElementById('m3n'+i).disabled=false}
-function m3multi(el,i){el.classList.toggle('on');document.getElementById('m3n'+i).disabled=el.closest('.mopts').querySelectorAll('.mopt.on').length===0}
-function m3go(to){
-  document.getElementById('m3s'+(to-1)).classList.remove('on');
-  document.getElementById('m3s'+to).classList.add('on');
-  document.getElementById('m3p'+(to-1)).className='mpd mdn';
-  document.getElementById('m3p'+to).className='mpd mact';
-  document.getElementById('mb3').scrollTop=0;
+// ── 진단 폼 로직 (모달3) ──
+const dState = { bodyPart:null, options:{}, score:0, name:'', phone:'' };
+
+function dUpdateProgress(step) {
+  document.getElementById('dProgressBar').style.width = (step/6*100)+'%';
 }
-function m3result(){
-  document.getElementById('m3s4').classList.remove('on');
-  document.getElementById('m3p4').className='mpd mdn';
-  document.getElementById('mp3').style.display='none';
-  document.getElementById('m3res').classList.add('on');
-  document.getElementById('mb3').scrollTop=0;
+function dGoTo(slideId) {
+  document.querySelectorAll('.d-slide').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(slideId).classList.add('active');
+  var stepMap={dslide1:1,dslide2a:2,dslide2b:2,dslide2c:2,dslide3a:3,dslide3b:3,dslide3c:3,dslide4:4,dslide5:5,dslide6:6};
+  dUpdateProgress(stepMap[slideId]||1);
+  document.getElementById('diag-wrap').scrollTop=0;
 }
-function m3sub(){
-  var name = document.getElementById('m3name').value.trim();
-  var phone = document.getElementById('m3phone').value.trim();
-  if(!name){alert('이름을 입력해 주세요');return}
-  if(phone.length<12){alert('연락처를 정확히 입력해 주세요');return}
-  var step1=(document.querySelector('#m3s0 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
-  var step2=(document.querySelector('#m3s1 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
-  var step3=(document.querySelector('#m3s2 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
-  var step4=Array.from(document.querySelectorAll('#m3s3 .mopt.on .mtx')).map(function(e){return e.textContent.trim()}).join(', ')||'-';
-  var step5=(document.querySelector('#m3s4 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
-  var btn=document.querySelector('#m3res .msbtn');
-  btn.textContent='전송 중...';btn.disabled=true;
-  fetch(GAS_URL3,{
-    method:'POST',mode:'no-cors',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({type:'30초 무료 보험금 진단',name:name,phone:phone,step1:step1,step2:step2,step3:step3,step4:step4,step5:step5,time:new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})})
-  }).finally(function(){
-    document.getElementById('m3res').classList.remove('on');
-    document.getElementById('m3done').classList.add('on');
-    document.getElementById('mb3').scrollTop=0;
+function dSelectBodyPart(part) {
+  dState.bodyPart=part; dState.score=0;
+  if(part==='spine') dGoTo('dslide2a');
+  else if(part==='pin'){dState.score+=3;dGoTo('dslide2b');}
+  else dGoTo('dslide2c');
+}
+function dSelectOption(el,key,value,points) {
+  dState.options[key]=value; dState.score+=points;
+  el.classList.add('selected');
+  setTimeout(function(){el.classList.remove('selected');},300);
+}
+function dFormatPhone(input) {
+  var v=input.value.replace(/[^0-9]/g,'');
+  if(v.length>11)v=v.slice(0,11);
+  if(v.length>=8)v=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7);
+  else if(v.length>=4)v=v.slice(0,3)+'-'+v.slice(3);
+  input.value=v;
+}
+function dSubmitForm() {
+  var name=document.getElementById('dNameInput').value.trim();
+  var phone=document.getElementById('dPhoneInput').value.trim();
+  if(!name){alert('이름을 입력해 주세요');return;}
+  if(phone.length<12){alert('연락처를 올바르게 입력해 주세요');return;}
+  dState.name=name; dState.phone=phone;
+  dBuildResult(); dGoTo('dslide6');
+  dSimulateNoti(name,phone);
+  dSendWebhook({name:name,phone:phone,bodyPart:dState.bodyPart,options:dState.options,score:dState.score});
+}
+function dBuildResult() {
+  var score=Math.min(dState.score,14);
+  var pct=Math.round((score/14)*100);
+  var label,sublabel,icon,tags;
+  if(score>=10){label='고액 보상 가능성 매우 높음';sublabel='상담 시 급행 처리 대상입니다 ⚡';icon='🏆';tags=['급행 처리 대상','후유장해 해당 가능','복합 청구 가능'];}
+  else if(score>=6){label='보상 가능성 높음';sublabel='전문가 검토를 강력 권장합니다';icon='⭐';tags=['후유장해 검토 필요','추가 서류 준비 가능'];}
+  else{label='기본 보험금 청구 가능';sublabel='놓친 항목이 있을 수 있습니다';icon='📋';tags=['기본 입원비 청구','상담 권장'];}
+  document.getElementById('dResultIcon').textContent=icon;
+  document.getElementById('dResultScore').textContent=pct;
+  document.getElementById('dResultLabel').textContent=label;
+  document.getElementById('dResultSublabel').textContent=sublabel;
+  document.getElementById('dResultTags').innerHTML=tags.map(function(t,i){return '<span class="d-result-tag '+(i===0?'gold':'')+'">'+t+'</span>';}).join('');
+  setTimeout(function(){document.getElementById('dScoreFill').style.width=pct+'%';},300);
+}
+function dSimulateNoti(name,phone) {
+  var bl={spine:'척추/허리 압박골절',pin:'골절 핀 고정 수술',joint:'관절/어깨/무릎',other:'기타 부위'};
+  var priority=dState.score>=10?'🚨 급행':dState.score>=6?'⭐ 일반':'📋 기본';
+  var mp=phone.slice(0,7)+'-****';
+  document.getElementById('dNotiText').innerHTML='새 상담 접수: <strong>'+name+' 고객</strong> · '+(bl[dState.bodyPart]||'기타')+' · <strong>'+priority+'</strong> · 📞 '+mp;
+}
+function dSendWebhook(data) {
+  var WEBHOOK_URL='https://hook.eu1.make.com/z94w3oy6v4e7yrowscjh5rr921pf32mi';
+  var bl={spine:'척추/허리/목',pin:'골절 + 핀 고정 수술',joint:'관절/어깨/무릎',other:'기타 부위'};
+  var ol={compression:{'40up':'압박률 40%이상','20to40':'압박률 20~40%','under20':'압박률 20%미만','unknown':'압박률 모름'},pin_remain:{'yes':'핀 체내 잔존','removed':'핀 제거 완료','unknown':'잔존 여부 모름'},duration:{'6m+':'6개월 이상','3to6m':'3~6개월','1to3m':'1~3개월','under1m':'1개월 미만'},surgery:{'yes':'수술 받음','no':'보존 치료'},fracture_count:{'3+':'3곳 이상','2':'2곳','1':'1곳'},insurance:{'multi':'2개 이상','one':'1개','unknown':'모름','none':'미가입'}};
+  var score=Math.min(data.score,14);
+  var pct=Math.round((score/14)*100);
+  var grade=score>=10?'🚨 급행':score>=6?'⭐ 일반':'📋 기본';
+  var dk={};
+  for(var k in (data.options||{})){dk[k]=(ol[k]&&ol[k][data.options[k]])||data.options[k];}
+  sendToGAS({
+    유형:'30초 무료 보험금 진단',
+    이름:data.name, 연락처:data.phone,
+    다친부위:bl[data.bodyPart]||data.bodyPart,
+    등급:grade, 점수:pct+'점',
+    압박률:dk.compression||'-',
+    핀잔존여부:dk.pin_remain||'-',
+    치료기간:dk.duration||'-',
+    수술여부:dk.surgery||'-',
+    골절부위수:dk.fracture_count||'-',
+    보험가입:dk.insurance||'-'
   });
+}
+function dRestartForm() {
+  dState.bodyPart=null;dState.options={};dState.score=0;
+  document.getElementById('dNameInput').value='';
+  document.getElementById('dPhoneInput').value='';
+  dGoTo('dslide1');
+}
+var dBaseCount=147;
+setInterval(function(){if(Math.random()<0.3){dBaseCount++;var el=document.getElementById('dTodayCount');if(el)el.textContent=dBaseCount;}},8000);
+</script>
+
+<script>
+// ══ 공통 이메일 전송 함수 (Google Apps Script) ══
+https://script.google.com/macros/s/AKfycbwyCxlPGpvt1JEUZ7h-NP_937dPP_sE4cxtcya46jvKcBs41pS-HU7FDccojF3yA2eK/exec
+
+function sendToGAS(payload) {
+  payload['접수시간'] = new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'});
+  payload['유입경로'] = document.referrer || '직접 접속';
+  payload['페이지URL'] = window.location.href;
+
+  fetch(GAS_EMAIL_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  }).catch(function(){});
 }
 </script>
 </body>
