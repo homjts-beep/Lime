@@ -177,7 +177,16 @@ nav a:hover { color: var(--lime); }
 .action-text { flex: 1; }
 .action-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
 .action-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
-.action-arrow { color: var(--lime); font-size: 20px; flex-shrink: 0; }
+.action-arrow { 
+  color: var(--dark);
+  background: var(--lime);
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
 
 .unified-btn {
   width: 100%;
@@ -204,6 +213,80 @@ nav a:hover { color: var(--lime); }
   justify-content: center;
   padding: 80px 60px;
   position: relative;
+}
+
+/* ─── 스크롤 다운 모션 ─── */
+.scroll-down {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 999;
+  text-decoration: none;
+  transition: opacity 0.4s ease;
+}
+.scroll-down.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.scroll-down-text {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(200,241,53,0.6);
+  text-transform: uppercase;
+}
+.scroll-mouse {
+  width: 24px;
+  height: 38px;
+  border: 2px solid rgba(200,241,53,0.4);
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.scroll-mouse::before {
+  content: '';
+  width: 4px;
+  height: 8px;
+  background: var(--lime);
+  border-radius: 2px;
+  position: absolute;
+  top: 6px;
+  animation: scrollWheel 1.8s ease-in-out infinite;
+}
+.scroll-arrows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.scroll-arrows span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--lime);
+  border-bottom: 2px solid var(--lime);
+  transform: rotate(45deg);
+  animation: scrollArrow 1.8s ease-in-out infinite;
+}
+.scroll-arrows span:nth-child(1) { opacity: 0.3; animation-delay: 0s; }
+.scroll-arrows span:nth-child(2) { opacity: 0.6; animation-delay: 0.2s; }
+.scroll-arrows span:nth-child(3) { opacity: 1;   animation-delay: 0.4s; }
+@keyframes scrollWheel {
+  0%   { top: 6px; opacity: 1; }
+  60%  { top: 18px; opacity: 0; }
+  61%  { top: 6px; opacity: 0; }
+  100% { top: 6px; opacity: 1; }
+}
+@keyframes scrollArrow {
+  0%, 100% { opacity: 0.2; transform: rotate(45deg) translateY(-3px); }
+  50%       { opacity: 1;   transform: rotate(45deg) translateY(3px); }
 }
 
 .hero-right::before {
@@ -733,20 +816,23 @@ footer {
 
 <!-- HEADER -->
 <header>
-  <a class="logo" href="#">라임<em>손해사정사</em></a>
+  <a class="logo" href="#">라임<em>손해사정사무소</em></a>
   <nav>
     <a href="#why">왜 필요한가</a>
     <a href="#accident">사고유형</a>
     <a href="#review">후기</a>
     <a href="#faq">FAQ</a>
   </nav>
-  <a class="header-cta" href="https://homjts-beep.github.io/-111/" target="_blank">무료 진단 시작</a>
+  <a class="header-cta" href="tel:010-3044-1236">📞 즉시 전화 상담</a>
 </header>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-left">
-    <div class="hero-eyebrow">⚡ 독립 손해사정사 · 보험금 전문</div>
+    <div class="hero-eyebrow">
+      ⚡ 독립 손해사정사 · 보험금 전문<br>
+      착수금❌ &nbsp;비밀보장⭕ &nbsp;초기대응 중요‼️
+    </div>
     <h1 class="hero-h1">
       보험금,<br>
       <span class="lime">혼자 받으면</span><br>
@@ -755,7 +841,8 @@ footer {
     <p class="hero-sub">
       척추·골절·핀 고정 수술 후 보험금,<br>
       보험사 기준으로만 받으셨나요?<br>
-      라임이 놓친 금액까지 찾아드립니다.
+      놓친 금액까지 찾아드립니다.<br>
+      <span style="color:var(--lime);font-weight:700;">보험사 현장 조사 전 상담 꼭 필요합니다</span>
     </p>
     <div class="hero-actions">
       <!-- 버튼 1: 30초 무료 진단 -->
@@ -767,8 +854,7 @@ footer {
           <div class="action-desc">부위 선택만 하면 예상 보험금 즉시 확인</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
-          <span style="background:var(--lime);color:var(--dark);font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;">무료진단</span>
-          <span style="color:var(--lime);font-size:20px;">→</span>
+          <span style="background:var(--lime);color:var(--dark);font-size:11px;font-weight:800;padding:5px 12px;border-radius:6px;letter-spacing:0.5px;">클릭</span>
         </div>
       </button>
 
@@ -781,8 +867,7 @@ footer {
           <div class="action-desc">사고 유형 선택만으로 예상 합의금·과실 즉시 확인</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
-          <span style="background:var(--lime);color:var(--dark);font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;">무료진단</span>
-          <span style="color:var(--lime);font-size:20px;">→</span>
+          <span style="background:var(--lime);color:var(--dark);font-size:11px;font-weight:800;padding:5px 12px;border-radius:6px;letter-spacing:0.5px;">클릭</span>
         </div>
       </button>
 
@@ -795,8 +880,7 @@ footer {
           <div class="action-desc">지금 보험료, 제대로 내고 계신가요? 전문가가 무료 분석해 드립니다</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
-          <span style="background:var(--lime);color:var(--dark);font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;">무료분석</span>
-          <span style="color:var(--lime);font-size:20px;">→</span>
+          <span style="background:var(--lime);color:var(--dark);font-size:11px;font-weight:800;padding:5px 12px;border-radius:6px;letter-spacing:0.5px;">클릭</span>
         </div>
       </button>
 
@@ -806,7 +890,7 @@ footer {
           <div class="action-title">카카오로 바로 상담</div>
           <div class="action-desc">진단서·보험 문자 사진으로 빠른 검토 가능</div>
         </div>
-        <div class="action-arrow">→</div>
+        <div class="action-arrow">클릭</div>
       </a>
     </div>
   </div>
@@ -844,33 +928,18 @@ footer {
   </div>
 </div>
 
-<!-- WHY -->
-<section class="why-section" id="why">
-  <div class="why-inner">
-    <div class="reveal">
-      <div class="section-tag">WHY LIME</div>
-      <h2 class="section-h2">보험금 판단,<br>꼭 알아야 할 구조</h2>
-    </div>
-    <div class="why-steps reveal">
-      <div class="why-step">
-        <div class="step-num">01</div>
-        <div class="step-title">보험금은 약관 해석에 따라<br>천차만별입니다</div>
-        <div class="step-desc">같은 사고라도 어떻게 청구하느냐에 따라 수백만 원에서 수천만 원 차이가 날 수 있습니다. 보험사는 절대 이것을 알려주지 않습니다.</div>
-      </div>
-      <div class="why-step">
-        <div class="step-num">02</div>
-        <div class="step-title">보험사 손해사정사는<br>보험사 편입니다</div>
-        <div class="step-desc">보험사 소속 손해사정사는 보험사의 기준에 따라 사고를 검토합니다. 독립 손해사정사인 라임은 오직 소비자 편에서만 움직입니다.</div>
-      </div>
-      <div class="why-step">
-        <div class="step-num">03</div>
-        <div class="step-title">독립 손해사정사 선임은<br>소비자의 권리입니다</div>
-        <div class="step-desc">법적으로 보장된 권리입니다. 보험사는 이를 거부하거나 불이익을 줄 수 없습니다. 무료로도 선임이 가능하며, 지금 바로 확인할 수 있습니다.</div>
-      </div>
-    </div>
+<!-- 스크롤 다운 모션 -->
+<div class="scroll-down" id="scrollIndicator">
+  <span class="scroll-down-text">scroll</span>
+  <div class="scroll-mouse"></div>
+  <div class="scroll-arrows">
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
-</section>
+</div>
 
+<!-- WHY -->
 <!-- ACCIDENT -->
 <section class="accident-section" id="accident">
   <div class="accident-inner">
@@ -896,7 +965,7 @@ footer {
           <div class="point-item">경추(목) 손상도 동일 기준 적용</div>
           <div class="point-item">이미 받은 보험금 외 추가 청구 가능 여부 검토</div>
         </div>
-        <a class="accident-cta" href="https://homjts-beep.github.io/-111/" target="_blank">척추 보험금 진단받기 →</a>
+        <a class="accident-cta" href="https://homjts-beep.github.io/Lime/" target="_blank">척추 보험금 진단받기 →</a>
       </div>
       <div class="accident-visual">
         <div class="case-title">최근 척추 지급 사례</div>
@@ -917,7 +986,7 @@ footer {
           <div class="point-item">제거 수술 비용도 청구 가능</div>
           <div class="point-item">골절 부위별 개별 산정 가능</div>
         </div>
-        <a class="accident-cta" href="https://homjts-beep.github.io/-111/" target="_blank">핀 고정 보험금 진단받기 →</a>
+        <a class="accident-cta" href="https://homjts-beep.github.io/Lime/" target="_blank">핀 고정 보험금 진단받기 →</a>
       </div>
       <div class="accident-visual">
         <div class="case-title">최근 핀 고정 지급 사례</div>
@@ -938,7 +1007,7 @@ footer {
           <div class="point-item">관절내시경 수술비 실손 청구</div>
           <div class="point-item">인공관절 치환술 고액 청구 가능</div>
         </div>
-        <a class="accident-cta" href="https://homjts-beep.github.io/-111/" target="_blank">관절 보험금 진단받기 →</a>
+        <a class="accident-cta" href="https://homjts-beep.github.io/Lime/" target="_blank">관절 보험금 진단받기 →</a>
       </div>
       <div class="accident-visual">
         <div class="case-title">최근 관절 지급 사례</div>
@@ -959,7 +1028,7 @@ footer {
           <div class="point-item">합의 전 전문가 검토 필수</div>
           <div class="point-item">뺑소니·무보험 차량 정부 보장사업 활용</div>
         </div>
-        <a class="accident-cta" href="https://homjts-beep.github.io/-111/" target="_blank">교통사고 진단받기 →</a>
+        <a class="accident-cta" href="https://homjts-beep.github.io/Lime/" target="_blank">교통사고 진단받기 →</a>
       </div>
       <div class="accident-visual">
         <div class="case-title">최근 교통사고 지급 사례</div>
@@ -980,7 +1049,7 @@ footer {
           <div class="point-item">입원 일당·수술비 중복 청구</div>
           <div class="point-item">암·뇌·심장 진단비 청구 검토</div>
         </div>
-        <a class="accident-cta" href="https://homjts-beep.github.io/-111/" target="_blank">실손 보험금 진단받기 →</a>
+        <a class="accident-cta" href="https://homjts-beep.github.io/Lime/" target="_blank">실손 보험금 진단받기 →</a>
       </div>
       <div class="accident-visual">
         <div class="case-title">최근 실손 지급 사례</div>
@@ -1001,7 +1070,7 @@ footer {
         <div class="section-tag">CUSTOMER REVIEWS</div>
         <h2 class="section-h2">실제 수령 후기</h2>
       </div>
-      <a href="https://homjts-beep.github.io/-111/" target="_blank" style="color:var(--lime); font-size:14px; font-weight:700; text-decoration:none;">전체 후기 보기 →</a>
+      <button onclick="mOpen('review-modal')" style="background:none;border:none;cursor:pointer;color:var(--lime);font-size:14px;font-weight:700;padding:0;">전체 후기 보기 →</button>
     </div>
     <div class="review-grid">
       <div class="review-card reveal">
@@ -1075,13 +1144,40 @@ footer {
   </div>
 </section>
 
+<!-- WHY LIME -->
+<section class="why-section" id="why">
+  <div class="why-inner">
+    <div class="reveal">
+      <div class="section-tag">WHY LIME</div>
+      <h2 class="section-h2">보험금 판단,<br>꼭 알아야 할 구조</h2>
+    </div>
+    <div class="why-steps reveal">
+      <div class="why-step">
+        <div class="step-num">01</div>
+        <div class="step-title">보험금은 약관 해석에 따라<br>천차만별입니다</div>
+        <div class="step-desc">같은 사고라도 어떻게 청구하느냐에 따라 수백만 원에서 수천만 원 차이가 날 수 있습니다. 보험사는 절대 이것을 알려주지 않습니다.</div>
+      </div>
+      <div class="why-step">
+        <div class="step-num">02</div>
+        <div class="step-title">보험사 손해사정사는<br>보험사 편입니다</div>
+        <div class="step-desc">보험사 소속 손해사정사는 보험사의 기준에 따라 사고를 검토합니다. 독립 손해사정사인 라임은 오직 소비자 편에서만 움직입니다.</div>
+      </div>
+      <div class="why-step">
+        <div class="step-num">03</div>
+        <div class="step-title">독립 손해사정사 선임은<br>소비자의 권리입니다</div>
+        <div class="step-desc">법적으로 보장된 권리입니다. 보험사는 이를 거부하거나 불이익을 줄 수 없습니다. 무료로도 선임이 가능하며, 지금 바로 확인할 수 있습니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CTA BANNER -->
 <div class="cta-banner reveal">
   <div class="cta-text">
     <h2>지금 바로 확인하세요<br>30초면 충분합니다</h2>
     <p>완전 무료 상담 · 착수금 없음 · 전문가 1:1 안내</p>
   </div>
-  <a class="cta-btn-dark" href="https://homjts-beep.github.io/-111/" target="_blank">
+  <a class="cta-btn-dark" href="https://homjts-beep.github.io/Lime/" target="_blank">
     🔍 무료 보험금 진단받기
   </a>
 </div>
@@ -1090,7 +1186,7 @@ footer {
 <footer>
   <div class="footer-inner">
     <div>
-      <div class="footer-logo-txt">라임손해사정사</div>
+      <div class="footer-logo-txt">라임손해사정사무소</div>
       <div class="footer-desc">
         독립 손해사정사 · 보험금 전문<br>
         완전 무료 상담 · 착수금 없음<br><br>
@@ -1103,7 +1199,7 @@ footer {
       <a href="#accident">사고 유형별 안내</a>
       <a href="#review">실제 후기</a>
       <a href="#faq">자주 묻는 질문</a>
-      <a href="https://homjts-beep.github.io/-111/" target="_blank">무료 진단 시작</a>
+      <a href="https://homjts-beep.github.io/Lime/" target="_blank">무료 진단 시작</a>
     </div>
   </div>
 </footer>
@@ -1395,12 +1491,12 @@ footer {
 // 공통
 function mOpen(id){
   var el=document.getElementById(id);
-  if(id==='ins-modal'){el.style.display='block';document.body.style.overflow='hidden';}
+  if(id==='ins-modal'||id==='review-modal'){el.style.display='block';document.body.style.overflow='hidden';}
   else{el.classList.add('on');document.body.style.overflow='hidden';}
 }
 function mClose(id){
   var el=document.getElementById(id);
-  if(id==='ins-modal'){el.style.display='none';document.body.style.overflow='';}
+  if(id==='ins-modal'||id==='review-modal'){el.style.display='none';document.body.style.overflow='';}
   else{el.classList.remove('on');document.body.style.overflow='';}
 }
 function mPhone(el){let v=el.value.replace(/\D/g,'');if(v.length<=3)el.value=v;else if(v.length<=7)el.value=v.slice(0,3)+'-'+v.slice(3);else el.value=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11)}
@@ -1491,6 +1587,57 @@ function showTab(id, btn) {
 }
 
 // FAQ
+// 스크롤 인디케이터 - 페이지 끝 근처에서 숨김
+(function(){
+  var indicator = document.getElementById('scrollIndicator');
+  window.addEventListener('scroll', function(){
+    var scrolled = window.scrollY;
+    var maxScroll = document.body.scrollHeight - window.innerHeight;
+    if(scrolled > maxScroll - 200){
+      indicator.classList.add('hidden');
+    } else {
+      indicator.classList.remove('hidden');
+    }
+  }, {passive: true});
+})();
+
+// ── 랜덤 셔플 유틸 ──
+function shuffle(arr){ for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;} return arr; }
+
+// ── 최근 지급 사례 랜덤 순서 ──
+(function(){
+  document.querySelectorAll('.accident-visual').forEach(function(visual){
+    var title = visual.querySelector('.case-title');
+    var items = Array.from(visual.querySelectorAll('.case-item'));
+    shuffle(items);
+    // 기존 items 제거 후 셔플 순서로 재삽입
+    items.forEach(function(item){ item.parentNode.removeChild(item); });
+    items.forEach(function(item){ visual.appendChild(item); });
+  });
+})();
+
+// ── 메인 실제수령후기 3개 랜덤 ──
+(function(){
+  var grid = document.querySelector('#review .review-grid');
+  if(!grid) return;
+  var cards = Array.from(grid.querySelectorAll('.review-card'));
+  shuffle(cards);
+  cards.forEach(function(c){ c.parentNode.removeChild(c); });
+  cards.forEach(function(c){ grid.appendChild(c); });
+})();
+
+// ── 전체후기 모달 랜덤 ──
+(function(){
+  var modal = document.querySelector('#review-modal');
+  if(!modal) return;
+  var grid = modal.querySelector('div[style*="grid"]');
+  if(!grid) return;
+  var cards = Array.from(grid.querySelectorAll('.review-card'));
+  shuffle(cards);
+  cards.forEach(function(c){ c.parentNode.removeChild(c); });
+  cards.forEach(function(c){ grid.appendChild(c); });
+})();
+
 function toggleFaq(el) {
   const isOpen = el.classList.contains('open');
   document.querySelectorAll('.faq-item').forEach(i => {
@@ -2196,5 +2343,45 @@ function sendToGAS(payload) {
   }).catch(function(){});
 }
 </script>
+
+<!-- 실수령후기 전체보기 모달 -->
+<div id="review-modal" onclick="if(event.target===this)mClose('review-modal')" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9100;overflow-y:auto;padding:24px 16px;">
+  <div style="max-width:900px;margin:0 auto;background:#181f17;border-radius:20px;padding:32px 24px;position:relative;">
+    <button onclick="mClose('review-modal')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.06);border:none;color:#aaa;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;">✕</button>
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="font-size:12px;font-weight:700;color:var(--lime);letter-spacing:2px;margin-bottom:8px;">CUSTOMER REVIEWS</div>
+      <h2 style="font-size:clamp(22px,3vw,32px);font-weight:900;color:#fff;margin:0;">실제 수령 후기 전체보기</h2>
+      <p style="color:#7d8c72;font-size:14px;margin-top:8px;">라임 손해사정사를 통해 실제로 보험금을 받으신 고객 후기입니다</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;">
+      <div class="review-card"><div class="review-top"><span class="review-badge">척추 압박골절</span><span class="review-stars">★★★★★</span></div><div class="review-body">혼자 청구했을 때 보험사가 300만원만 준다고 했어요. 라임을 통해 압박률을 다시 산정받았더니 2,100만원을 추가로 받았습니다. 이런 항목이 있는 줄 몰랐어요.</div><div class="review-foot"><div class="reviewer"><strong>김○○ (58세, 남)</strong>요추 압박골절</div><div class="review-gain">+2,100만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">핀 고정 수술</span><span class="review-stars">★★★★★</span></div><div class="review-body">핀이 몸 안에 남아있는 게 보험금 항목인 줄 전혀 몰랐어요. 라임 덕분에 1,500만원을 받았고 착수금도 없었습니다. 정말 감사합니다.</div><div class="review-foot"><div class="reviewer"><strong>이○○ (45세, 여)</strong>대퇴골 골절</div><div class="review-gain">+1,500만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">교통사고</span><span class="review-stars">★★★★★</span></div><div class="review-body">보험사에서 합의 제시 금액이 너무 낮아 상담받았어요. 자동차보험·실손·상해보험 세 곳 복합 청구로 원래 제시금액의 3배 이상 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>박○○ (52세, 남)</strong>교통사고 후유장해</div><div class="review-gain">+2,800만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">무릎 인공관절</span><span class="review-stars">★★★★★</span></div><div class="review-body">양쪽 무릎 수술 후 보험사에서 한쪽만 인정해줬어요. 라임에 맡겼더니 양쪽 모두 후유장해 인정받아 총 3,400만원을 받았습니다. 혼자였으면 절반도 못 받을 뻔했어요.</div><div class="review-foot"><div class="reviewer"><strong>최○○ (67세, 여)</strong>양측 슬관절 치환술</div><div class="review-gain">+3,400만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">뇌경색</span><span class="review-stars">★★★★★</span></div><div class="review-body">뇌경색 진단 후 보험금 청구를 어디서 어떻게 해야 할지 막막했어요. 라임에서 진단비·수술비·후유장해 항목을 모두 찾아줘서 1억 200만원을 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>정○○ (61세, 남)</strong>뇌경색 후유장해</div><div class="review-gain">+1억 200만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">어깨 회전근개</span><span class="review-stars">★★★★★</span></div><div class="review-body">어깨 수술 후 보험사에서 실손만 처리해줬는데, 라임 통해서 수술비·후유장해까지 추가로 확인받아 980만원을 더 받았어요. 몰랐던 항목이 이렇게 많을 줄이야.</div><div class="review-foot"><div class="reviewer"><strong>윤○○ (49세, 남)</strong>회전근개 파열 수술</div><div class="review-gain">+980만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">허리 디스크</span><span class="review-stars">★★★★★</span></div><div class="review-body">디스크로 수술 후 재발해서 두 번 수술했는데 보험금을 한 번만 받았어요. 라임에서 두 번째 수술분 포함해서 재청구 도와줘서 1,200만원 추가 수령했습니다.</div><div class="review-foot"><div class="reviewer"><strong>한○○ (53세, 여)</strong>요추간판탈출증 재수술</div><div class="review-gain">+1,200만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">암 진단</span><span class="review-stars">★★★★★</span></div><div class="review-body">유방암 진단 때 일반암인지 소액암인지 분류가 애매하다며 보험사가 소액으로 처리했어요. 라임에서 이의제기 해줘서 일반암 기준으로 4,500만원을 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>조○○ (44세, 여)</strong>유방암 진단</div><div class="review-gain">+4,500만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">골반 골절</span><span class="review-stars">★★★★★</span></div><div class="review-body">낙상으로 골반 골절 후 보험사에서 최소한만 지급하겠다고 했어요. 라임에서 장해 등급 제대로 산정받아서 당초 제시액보다 1,800만원 더 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>강○○ (70세, 남)</strong>골반 골절 후유증</div><div class="review-gain">+1,800만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">산업재해</span><span class="review-stars">★★★★★</span></div><div class="review-body">공장에서 손가락 절단 사고가 났는데 산재 외에 개인보험도 청구 가능한 줄 몰랐어요. 라임 덕분에 보험사 3곳에서 총 2,600만원을 추가로 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>임○○ (38세, 남)</strong>손가락 절단 산업재해</div><div class="review-gain">+2,600만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">뇌출혈</span><span class="review-stars">★★★★★</span></div><div class="review-body">아버지가 뇌출혈로 입원하셨는데 가족들이 보험을 잘 몰라서 기본 입원비만 받았어요. 라임에서 검토해보니 후유장해·수술비 등 놓친 항목이 많아 6,700만원을 더 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>오○○ (72세, 남)</strong>뇌출혈 후유장해</div><div class="review-gain">+6,700만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">발목 골절</span><span class="review-stars">★★★★★</span></div><div class="review-body">발목 골절로 수술 후 핀이 남아있는 상태인데 보험사에서 이미 다 정산됐다고 했어요. 라임에서 핀 잔존 항목을 추가로 청구해줘서 750만원 더 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>노○○ (35세, 여)</strong>발목 핀 고정술</div><div class="review-gain">+750만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">심근경색</span><span class="review-stars">★★★★★</span></div><div class="review-body">심근경색 스텐트 시술 후 보험금을 직접 청구했는데 생각보다 적게 나왔어요. 라임에서 항목 전수조사 해줘서 2,300만원을 추가로 받았어요. 정말 믿고 맡기길 잘했습니다.</div><div class="review-foot"><div class="reviewer"><strong>류○○ (55세, 남)</strong>심근경색 스텐트 시술</div><div class="review-gain">+2,300만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">후유장해 재산정</span><span class="review-stars">★★★★★</span></div><div class="review-body">3년 전에 사고로 이미 합의했는데 시효가 남아있다고 해서 재청구 했어요. 라임에서 놓쳤던 장해 항목 찾아줘서 1,650만원을 추가로 수령했습니다. 포기하지 않길 잘했어요.</div><div class="review-foot"><div class="reviewer"><strong>서○○ (46세, 여)</strong>교통사고 재청구</div><div class="review-gain">+1,650만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">당뇨 합병증</span><span class="review-stars">★★★★★</span></div><div class="review-body">당뇨 합병증으로 발 절단 후 보험사에서 지급 거절을 받았어요. 라임에서 기존 병력과 사고 연관성을 입증해줘서 최종 5,200만원을 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>문○○ (62세, 남)</strong>당뇨 합병증 절단</div><div class="review-gain">+5,200만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">화상</span><span class="review-stars">★★★★★</span></div><div class="review-body">주방 화재로 팔에 2도 화상을 입었는데 보험사가 실손 치료비만 줬어요. 라임에서 화상 면적·장해 등급 제대로 따져줘서 1,100만원을 더 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>권○○ (41세, 여)</strong>화상 후유장해</div><div class="review-gain">+1,100만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">척추관 협착증</span><span class="review-stars">★★★★★</span></div><div class="review-body">협착증 수술 후 보험사에서 비급여 항목이 많다며 삭감하려 했어요. 라임에서 의료 기록 분석해서 전액 인정받았고 추가 장해 보험금도 받아 총 1,900만원이었습니다.</div><div class="review-foot"><div class="reviewer"><strong>배○○ (64세, 남)</strong>척추관 협착증 수술</div><div class="review-gain">+1,900만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">갑상선암</span><span class="review-stars">★★★★★</span></div><div class="review-body">갑상선암 진단 때 소액암으로만 처리됐는데, 가입 시점 약관 기준으로는 일반암 해당된다는 걸 라임에서 알려줬어요. 차액 포함해서 3,800만원을 더 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>신○○ (50세, 여)</strong>갑상선암 약관 분쟁</div><div class="review-gain">+3,800만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">스포츠 부상</span><span class="review-stars">★★★★★</span></div><div class="review-body">운동 중 십자인대 파열로 수술했는데 보험사에서 스포츠 활동 중 부상이라며 일부 면책 적용했어요. 라임에서 면책 조항이 부당하다고 이의제기해서 890만원 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>황○○ (33세, 남)</strong>전방십자인대 파열</div><div class="review-gain">+890만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">다발성 골절</span><span class="review-stars">★★★★★</span></div><div class="review-body">오토바이 사고로 갈비뼈·쇄골·손목 다발성 골절이었는데 보험사에서 부위별로 쪼개서 지급하려 했어요. 라임에서 합산 기준으로 처리해줘서 2,450만원을 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>장○○ (28세, 남)</strong>오토바이 사고 다발성 골절</div><div class="review-gain">+2,450만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">파킨슨병</span><span class="review-stars">★★★★★</span></div><div class="review-body">파킨슨 진단 후 장기 입원비만 받고 있었는데 라임에서 뇌질환 진단비·장해 항목이 누락됐다는 걸 알려줬어요. 추가로 4,100만원을 수령했습니다.</div><div class="review-foot"><div class="reviewer"><strong>이○○ (68세, 남)</strong>파킨슨병 진단</div><div class="review-gain">+4,100만</div></div></div>
+      <div class="review-card"><div class="review-top"><span class="review-badge">슬개골 골절</span><span class="review-stars">★★★★★</span></div><div class="review-body">계단에서 넘어져 슬개골이 골절됐는데 보험사에서 단순 골절로만 처리했어요. 라임에서 수술 방법·핀 잔존 항목을 꼼꼼히 따져줘서 820만원을 더 받았습니다.</div><div class="review-foot"><div class="reviewer"><strong>김○○ (57세, 여)</strong>슬개골 골절 수술</div><div class="review-gain">+820만</div></div></div>
+    </div>
+    <div style="text-align:center;margin-top:28px;">
+      <button onclick="mClose('review-modal')" style="background:var(--lime);color:#0d1309;border:none;border-radius:12px;padding:14px 40px;font-size:15px;font-weight:800;cursor:pointer;">닫기</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
