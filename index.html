@@ -741,14 +741,14 @@ footer {
       라임이 놓친 금액까지 찾아드립니다.
     </p>
     <div class="hero-actions">
-      <a class="action-card" href="https://homjts-beep.github.io/-111/" target="_blank">
+      <button class="action-card" onclick="mOpen('ov3')" style="width:100%;background:var(--card);border:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;color:var(--text);cursor:pointer;text-align:left;">
         <div class="action-icon">🔍</div>
         <div class="action-text">
           <div class="action-title">30초 무료 진단받기</div>
           <div class="action-desc">부위 선택만 하면 예상 보험금 즉시 확인</div>
         </div>
         <div class="action-arrow">→</div>
-      </a>
+      </button>
 
       <button class="action-card" onclick="mOpen('ov1')" style="background:var(--card);border:1px solid var(--border);font-family:'Noto Sans KR',sans-serif;color:var(--text);cursor:pointer;">
         <div class="action-icon" style="background:rgba(200,241,53,0.15)">🚗</div>
@@ -1252,10 +1252,8 @@ footer {
   <div class="mdone" id="m1done">
     <div class="mdone-ic">✅</div>
     <div class="mdone-title">상담 신청이 완료되었습니다!</div>
-    <div class="mdone-desc">담당 손해사정사가 <strong style="color:var(--lime)">1 영업일 이내</strong>에 연락드립니다.<br><br>아래 버튼을 눌러 상담 내용을 카카오로 바로 전달하세요!</div>
-    <a class="mkk" id="m1kakaoBtn" href="http://pf.kakao.com/_QImIX/chat" target="_blank" style="margin-top:20px;display:inline-flex;">💬 카카오로 상담 내용 전달하기</a>
-    <div style="background:#1a1f14;border:1px solid rgba(200,241,53,0.15);border-radius:10px;padding:14px;margin-top:14px;font-size:12px;color:#8a9a7a;line-height:1.8;text-align:left" id="m1msgPreview"></div>
-    <div style="font-size:11px;color:#4a5a3a;margin-top:8px;text-align:center;line-height:1.6">💡 버튼 클릭 시 위 내용이 자동 복사됩니다<br>카카오 채팅창에서 붙여넣기(길게 누르기)해 주세요</div>
+    <div class="mdone-desc">담당 손해사정사가 <strong style="color:var(--lime)">1 영업일 이내</strong>에 연락드립니다.</div>
+    <a class="mkk" href="http://pf.kakao.com/_QImIX/chat" target="_blank">💬 카카오로 바로 상담하기</a>
   </div>
  </div>
 </div>
@@ -1381,69 +1379,12 @@ function m1result(){
   document.getElementById('m1res').classList.add('on');
   document.getElementById('mb1').scrollTop=0
 }
-// ★ Google Apps Script 웹앱 URL (설정 후 여기에 붙여넣기)
-const GAS_URL = 'https://script.google.com/macros/s/AKfycby6uJG9Q0vA6vUQf6QosL71OqIXXrSahiTg0-EA1xx3CQtqheoY8jP8wurZ1NiJ0uQtGA/exec';
-
 function m1sub(){
-  const name  = document.getElementById('m1name').value.trim();
-  const phone = document.getElementById('m1phone').value.trim();
-  if(!name){alert('이름을 입력해 주세요');return}
-  if(phone.length<12){alert('연락처를 정확히 입력해 주세요');return}
-
-  // 선택 항목 수집
-  const step1 = document.querySelector('#m1s0 .mopt.on .mtx')?.textContent.trim() || '-';
-  const step2 = [...document.querySelectorAll('#m1s1 .mopt.on .mtx')].map(e=>e.textContent.trim()).join(', ') || '-';
-  const step3 = document.querySelector('#m1s2 .mopt.on .mtx')?.textContent.trim() || '-';
-  const step4 = document.querySelector('#m1s3 .mopt.on .mtx')?.textContent.trim() || '-';
-  const step5 = document.querySelector('#m1s4 .mopt.on .mtx')?.textContent.trim() || '-';
-
-  // 카카오로 전달할 메시지 생성
-  const kakaoMsg = '[라임손해사정사 상담신청]\n──────────────────\n👤 이름: '+name+'\n📞 연락처: '+phone+'\n──────────────────\n🚗 사고유형: '+step1+'\n🩹 부상정도: '+step2+'\n🏥 치료여부: '+step3+'\n⚖️ 과실비율: '+step4+'\n💼 직업군: '+step5+'\n──────────────────\n교통사고 무료 진단 상담 신청드립니다.';
-
-  // 클립보드에 복사
-  try { navigator.clipboard.writeText(kakaoMsg); } catch(e) {}
-
-  // 미리보기 표시
-  const preview = document.getElementById('m1msgPreview');
-  if(preview) preview.innerHTML = kakaoMsg.replace(/\n/g,'<br>');
-
-  // 카카오 버튼에 메시지 파라미터 설정 (카카오 오픈채팅은 직접 텍스트 전달 불가, 클립보드 방식 사용)
-  const kakaoBtn = document.getElementById('m1kakaoBtn');
-  if(kakaoBtn){
-    kakaoBtn.onclick = function(){
-      navigator.clipboard.writeText(kakaoMsg).then(()=>{
-        // 복사 완료 후 카카오 열기
-      }).catch(()=>{});
-    };
-  }
-
-  // 버튼 로딩 상태
-  const btn = document.querySelector('#m1res .msbtn');
-  btn.textContent = '전송 중...';
-  btn.disabled = true;
-
-  // Apps Script로 전송
-  fetch(GAS_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      type: '30초 교통사고 무료 진단',
-      name, phone,
-      step1, step2, step3, step4, step5,
-      time: new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'})
-    })
-  })
-  .then(()=>{
-    document.getElementById('m1res').classList.remove('on');
-    document.getElementById('m1done').classList.add('on');
-    document.getElementById('mb1').scrollTop=0;
-  })
-  .catch(()=>{
-    document.getElementById('m1res').classList.remove('on');
-    document.getElementById('m1done').classList.add('on');
-    document.getElementById('mb1').scrollTop=0;
-  });
+  if(!document.getElementById('m1name').value.trim()){alert('이름을 입력해 주세요');return}
+  if(document.getElementById('m1phone').value.length<12){alert('연락처를 정확히 입력해 주세요');return}
+  document.getElementById('m1res').classList.remove('on');
+  document.getElementById('m1done').classList.add('on');
+  document.getElementById('mb1').scrollTop=0
 }
 
 // 모달2 - 12대 중과실
@@ -1495,5 +1436,142 @@ const obs = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 
+
+<!-- ══════════════════ 모달 3: 30초 무료 진단받기 ══════════════════ -->
+<div class="mov" id="ov3" onclick="if(event.target.id==='ov3')mClose('ov3')">
+ <div class="mbox" id="mb3">
+  <button class="mcx" onclick="mClose('ov3')">✕</button>
+  <div class="mbadge">🔍 보험금 전문 진단</div>
+  <div class="mtitle">30초 무료<br><span class="mg">보험금 진단 서비스</span></div>
+  <div class="mprog" id="mp3">
+    <div class="mpd mact" id="m3p0"></div>
+    <div class="mpd" id="m3p1"></div>
+    <div class="mpd" id="m3p2"></div>
+    <div class="mpd" id="m3p3"></div>
+    <div class="mpd" id="m3p4"></div>
+  </div>
+  <div class="mstep on" id="m3s0">
+    <div class="mlbl">STEP 1 / 5</div>
+    <div class="mq">청구할 보험 유형을 선택해 주세요</div>
+    <div class="mopts">
+      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">🦴</div><div class="mtx">척추·골절·압박골절</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">📌</div><div class="mtx">핀 고정·금속 내고정물 잔존</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">🦵</div><div class="mtx">관절·어깨·무릎 손상</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">🚗</div><div class="mtx">교통사고</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,0)"><div class="mic">🏥</div><div class="mtx">실손·입원비</div><div class="mchk"></div></div>
+    </div>
+    <button class="mnxt" id="m3n0" disabled onclick="m3go(1)">다음 단계 →</button>
+  </div>
+  <div class="mstep" id="m3s1">
+    <div class="mlbl">STEP 2 / 5</div>
+    <div class="mq">수술 또는 입원 여부</div>
+    <div class="mopts">
+      <div class="mopt" onclick="m3pick(this,1)"><div class="mic">🏥</div><div class="mtx">수술 받았음</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,1)"><div class="mic">🛏️</div><div class="mtx">입원만 했음</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,1)"><div class="mic">🚶</div><div class="mtx">통원 치료만 했음</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,1)"><div class="mic">⏳</div><div class="mtx">아직 치료 전</div><div class="mchk"></div></div>
+    </div>
+    <button class="mnxt" id="m3n1" disabled onclick="m3go(2)">다음 단계 →</button>
+  </div>
+  <div class="mstep" id="m3s2">
+    <div class="mlbl">STEP 3 / 5</div>
+    <div class="mq">보험금을 받은 적 있으신가요?</div>
+    <div class="mopts">
+      <div class="mopt" onclick="m3pick(this,2)"><div class="mic">✅</div><div class="mtx">이미 받았음 (추가 청구 검토)</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,2)"><div class="mic">🔍</div><div class="mtx">아직 청구 안 함</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,2)"><div class="mic">❌</div><div class="mtx">거절·삭감 당함</div><div class="mchk"></div></div>
+    </div>
+    <button class="mnxt" id="m3n2" disabled onclick="m3go(3)">다음 단계 →</button>
+  </div>
+  <div class="mstep" id="m3s3">
+    <div class="mlbl">STEP 4 / 5</div>
+    <div class="mq">가입한 보험 종류 <span class="mhint">(다중 선택 가능)</span></div>
+    <div class="mopts">
+      <div class="mopt" onclick="m3multi(this,3)"><div class="mic">🚗</div><div class="mtx">자동차보험</div><div class="mchk sq"></div></div>
+      <div class="mopt" onclick="m3multi(this,3)"><div class="mic">🏥</div><div class="mtx">실손보험</div><div class="mchk sq"></div></div>
+      <div class="mopt" onclick="m3multi(this,3)"><div class="mic">💊</div><div class="mtx">상해보험</div><div class="mchk sq"></div></div>
+      <div class="mopt" onclick="m3multi(this,3)"><div class="mic">❓</div><div class="mtx">잘 모름</div><div class="mchk sq"></div></div>
+    </div>
+    <button class="mnxt" id="m3n3" disabled onclick="m3go(4)">다음 단계 →</button>
+  </div>
+  <div class="mstep" id="m3s4">
+    <div class="mlbl">STEP 5 / 5</div>
+    <div class="mq">직업군 선택 <span class="mhint">(휴업손해 산정용)</span></div>
+    <div class="mopts">
+      <div class="mopt" onclick="m3pick(this,4)"><div class="mic">💼</div><div class="mtx">직장인</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,4)"><div class="mic">🏢</div><div class="mtx">사업자</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,4)"><div class="mic">🏠</div><div class="mtx">주부 · 학생 · 무직</div><div class="mchk"></div></div>
+      <div class="mopt" onclick="m3pick(this,4)"><div class="mic">❓</div><div class="mtx">기타</div><div class="mchk"></div></div>
+    </div>
+    <button class="mnxt" id="m3n4" disabled onclick="m3result()">결과 보기 →</button>
+  </div>
+  <div class="mres" id="m3res">
+    <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(200,241,53,0.12);border:1px solid rgba(200,241,53,0.3);border-radius:999px;padding:4px 12px;font-size:11px;color:var(--lime);font-weight:700;margin-bottom:12px">🔍 진단 완료</div>
+    <div style="font-family:'Gmarket Sans',sans-serif;font-size:19px;font-weight:700;color:#fff;line-height:1.4;margin-bottom:10px">놓친 보험금이 있을 가능성이<br><span style="color:var(--lime)">매우 높습니다</span></div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px">선택하신 정보 분석 결과, 추가 청구 가능 항목이 발견되었습니다.</div>
+    <div class="mhbox"><p>고객님의 케이스는 <strong>보험사가 알려주지 않는 항목</strong>이 존재할 가능성이 높습니다.<br><br>전문가 검토 없이 마무리하실 경우 <strong>수백만 원 이상의 손실</strong>이 발생할 수 있습니다.</p></div>
+    <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">📞 무료 상담 신청</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px">전담 손해사정사가 직접 연락드립니다. 착수금 없이 무료로 진행됩니다.</div>
+    <div class="mform">
+      <div><label class="mflbl">이름</label><input type="text" id="m3name" placeholder="홍길동"></div>
+      <div><label class="mflbl">연락처</label><input type="tel" id="m3phone" placeholder="010-0000-0000" oninput="mPhone(this)" maxlength="13"></div>
+      <button class="msbtn" onclick="m3sub()">맞춤 가이드라인 및 무료 상담 신청하기 →</button>
+      <div class="mprv">입력하신 정보는 무료 상담 목적으로만 활용되며, 외부에 제공되지 않습니다.</div>
+    </div>
+  </div>
+  <div class="mdone" id="m3done">
+    <div class="mdone-ic">✅</div>
+    <div class="mdone-title">상담 신청이 완료되었습니다!</div>
+    <div class="mdone-desc">담당 손해사정사가 <strong style="color:var(--lime)">1 영업일 이내</strong>에 연락드립니다.</div>
+    <a class="mkk" href="http://pf.kakao.com/_QImIX/chat" target="_blank">💬 카카오로 바로 상담하기</a>
+  </div>
+ </div>
+</div>
+
+<script>
+// 모달3 - 보험금 진단 (30초 무료 진단받기)
+const GAS_URL3 = 'https://script.google.com/macros/s/AKfycbybx-XQLiRtNLghU_lO_barQqN7pYTmJAR_67TqNF4FiGo9MvC0lfUCTZRoYCzDDT-x/exec6';
+function mOpen(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden'}
+function mClose(id){document.getElementById(id).classList.remove('on');document.body.style.overflow=''}
+function mPhone(el){var v=el.value.replace(/\D/g,'');if(v.length<=3)el.value=v;else if(v.length<=7)el.value=v.slice(0,3)+'-'+v.slice(3);else el.value=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11)}
+function m3pick(el,i){el.closest('.mopts').querySelectorAll('.mopt').forEach(function(o){o.classList.remove('on')});el.classList.add('on');document.getElementById('m3n'+i).disabled=false}
+function m3multi(el,i){el.classList.toggle('on');document.getElementById('m3n'+i).disabled=el.closest('.mopts').querySelectorAll('.mopt.on').length===0}
+function m3go(to){
+  document.getElementById('m3s'+(to-1)).classList.remove('on');
+  document.getElementById('m3s'+to).classList.add('on');
+  document.getElementById('m3p'+(to-1)).className='mpd mdn';
+  document.getElementById('m3p'+to).className='mpd mact';
+  document.getElementById('mb3').scrollTop=0;
+}
+function m3result(){
+  document.getElementById('m3s4').classList.remove('on');
+  document.getElementById('m3p4').className='mpd mdn';
+  document.getElementById('mp3').style.display='none';
+  document.getElementById('m3res').classList.add('on');
+  document.getElementById('mb3').scrollTop=0;
+}
+function m3sub(){
+  var name = document.getElementById('m3name').value.trim();
+  var phone = document.getElementById('m3phone').value.trim();
+  if(!name){alert('이름을 입력해 주세요');return}
+  if(phone.length<12){alert('연락처를 정확히 입력해 주세요');return}
+  var step1=(document.querySelector('#m3s0 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step2=(document.querySelector('#m3s1 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step3=(document.querySelector('#m3s2 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var step4=Array.from(document.querySelectorAll('#m3s3 .mopt.on .mtx')).map(function(e){return e.textContent.trim()}).join(', ')||'-';
+  var step5=(document.querySelector('#m3s4 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
+  var btn=document.querySelector('#m3res .msbtn');
+  btn.textContent='전송 중...';btn.disabled=true;
+  fetch(GAS_URL3,{
+    method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({type:'30초 무료 보험금 진단',name:name,phone:phone,step1:step1,step2:step2,step3:step3,step4:step4,step5:step5,time:new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})})
+  }).finally(function(){
+    document.getElementById('m3res').classList.remove('on');
+    document.getElementById('m3done').classList.add('on');
+    document.getElementById('mb3').scrollTop=0;
+  });
+}
+</script>
 </body>
 </html>
