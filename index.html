@@ -1390,10 +1390,10 @@ function m1sub(){
   var step4=Array.from(document.querySelectorAll('#m1s3 .mopt.on .mtx')).map(function(e){return e.textContent.trim();}).join(', ')||'-';
   var step5=(document.querySelector('#m1s4 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
   sendToGAS({
-    유형:'30초 교통사고 무료 진단',
-    이름:name, 연락처:phone,
-    'STEP1_사고유형':step1,'STEP2_수술입원':step2,'STEP3_합의여부':step3,
-    'STEP4_보험종류':step4,'STEP5_직업':step5
+    name:name, phone:phone,
+    step1:step1, step2:step2, step3:step3, step4:step4, step5:step5,
+    type:'30초 교통사고 무료 진단',
+    time:new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})
   });
   document.getElementById('m1res').classList.remove('on');
   document.getElementById('m1done').classList.add('on');
@@ -1420,10 +1420,10 @@ function m2sub(){
   var step3=(document.querySelector('#m2s2 .mopt.on .mtx')||{textContent:'-'}).textContent.trim();
   var step4=Array.from(document.querySelectorAll('#m2s3 .mopt.on .mtx')).map(function(e){return e.textContent.trim();}).join(', ')||'-';
   sendToGAS({
-    유형:'12대 중과실 사고 무료 진단',
-    이름:name, 연락처:phone,
-    'STEP1_중과실유형':step1,'STEP2_부상정도':step2,'STEP3_합의여부':step3,
-    'STEP4_보험종류':step4
+    name:name, phone:phone,
+    step1:step1, step2:step2, step3:step3, step4:step4, step5:'-',
+    type:'12대 중과실 사고 무료 진단',
+    time:new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})
   });
   document.getElementById('m2s4').classList.remove('on');
   document.getElementById('mp2').style.display='none';
@@ -1873,16 +1873,14 @@ function dSendWebhook(data) {
   var dk={};
   for(var k in (data.options||{})){dk[k]=(ol[k]&&ol[k][data.options[k]])||data.options[k];}
   sendToGAS({
-    유형:'30초 무료 보험금 진단',
-    이름:data.name, 연락처:data.phone,
-    다친부위:bl[data.bodyPart]||data.bodyPart,
-    등급:grade, 점수:pct+'점',
-    압박률:dk.compression||'-',
-    핀잔존여부:dk.pin_remain||'-',
-    치료기간:dk.duration||'-',
-    수술여부:dk.surgery||'-',
-    골절부위수:dk.fracture_count||'-',
-    보험가입:dk.insurance||'-'
+    name:data.name, phone:data.phone,
+    step1:bl[data.bodyPart]||data.bodyPart,
+    step2:dk.compression||'-',
+    step3:dk.surgery||'-',
+    step4:dk.insurance||'-',
+    step5:grade,
+    type:'30초 무료 보험금 진단',
+    time:new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})
   });
 }
 function dRestartForm() {
@@ -1896,18 +1894,19 @@ setInterval(function(){if(Math.random()<0.3){dBaseCount++;var el=document.getEle
 </script>
 
 <script>
-// ══ 공통 이메일 전송 함수 (Google Apps Script) ══
-https://script.google.com/macros/s/AKfycbwyCxlPGpvt1JEUZ7h-NP_937dPP_sE4cxtcya46jvKcBs41pS-HU7FDccojF3yA2eK/exec
+// ══ 공통 전송 함수 (Google Apps Script) ══
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbzwBmB9B7FEte58bA4t_YfSJIZTwgIfSemHhyfvBj-bU6cqc2slxJyYPq_GA3t1o0Ed/exec';
 
 function sendToGAS(payload) {
-  payload['접수시간'] = new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'});
-  payload['유입경로'] = document.referrer || '직접 접속';
-  payload['페이지URL'] = window.location.href;
+  if (!payload.name  && payload['이름'])   payload.name  = payload['이름'];
+  if (!payload.phone && payload['연락처']) payload.phone = payload['연락처'];
+  if (!payload.time)  payload.time  = new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'});
+  if (!payload.type)  payload.type  = payload['유형'] || '상담신청';
 
-  fetch(GAS_EMAIL_URL, {
+  // no-cors 제거 + Content-Type: text/plain → GAS가 postData.contents 정상 수신
+  fetch(GAS_URL, {
     method: 'POST',
-    mode: 'no-cors',
-    headers: {'Content-Type': 'application/json'},
+    headers: {'Content-Type': 'text/plain'},
     body: JSON.stringify(payload)
   }).catch(function(){});
 }
