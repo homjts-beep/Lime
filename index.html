@@ -3,7 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>라임손해사정사 | 보험금은 받아야 제맛</title>
+<title>라임손해사정사무소 | 보험금 청구 전문 · 척추·골절·교통사고 무료상담</title>
+<meta name="description" content="보험금 청구 전문 독립 손해사정사. 척추 압박골절·핀 고정·교통사고·실손보험 무료 상담. 착수금 0원, 성공 보수제. 보험사보다 평균 2.3배 더 받은 실제 사례 확인.">
+<meta name="keywords" content="보험금청구,손해사정사,척추보험금,교통사고합의금,실손보험청구,보험금못받은,골절보험금,핀고정보험금,독립손해사정사,보험금전문">
+<meta name="robots" content="index, follow">
+<meta name="author" content="라임손해사정사무소">
+<link rel="canonical" href="https://homjts-beep.github.io/Lime/">
+
+<!-- Open Graph (SNS 공유) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="라임손해사정사무소 | 보험금 청구 전문 · 무료상담">
+<meta property="og:description" content="척추·골절·교통사고 보험금, 혼자 받으면 손해입니다. 독립 손해사정사가 놓친 보험금까지 찾아드립니다. 착수금 0원 · 완전 무료 상담.">
+<meta property="og:url" content="https://homjts-beep.github.io/Lime/">
+<meta property="og:site_name" content="라임손해사정사무소">
+<meta property="og:locale" content="ko_KR">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="라임손해사정사무소 | 보험금 청구 전문">
+<meta name="twitter:description" content="척추·골절·교통사고 보험금, 혼자 받으면 손해. 독립 손해사정사 무료상담.">
+
+<!-- Schema.org 구조화 데이터 (네이버/구글 검색 노출 강화) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "라임손해사정사무소",
+  "description": "보험금 청구 전문 독립 손해사정사무소. 척추 압박골절, 핀 고정, 교통사고, 실손보험 전문 무료 상담.",
+  "url": "https://homjts-beep.github.io/Lime/",
+  "telephone": "",
+  "priceRange": "무료상담 · 성공보수제",
+  "serviceArea": {"@type": "Country", "name": "대한민국"},
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "보험금 청구 서비스",
+    "itemListElement": [
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "척추 압박골절 보험금 청구"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "교통사고 합의금 분석"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "핀 고정 후유장해 청구"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "실손보험 청구 대행"}}
+    ]
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "2300",
+    "bestRating": "5"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -85,7 +135,7 @@ nav a:hover { color: var(--lime); }
 
 /* ─── HERO ─── */
 .hero {
-  padding-top: 64px;
+  padding-top: 0;
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -810,6 +860,97 @@ footer {
 /* reveal */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
 .reveal.on { opacity: 1; transform: translateY(0); }
+/* ── 퀄리티 업그레이드 ── */
+/* 노이즈 텍스처 오버레이 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.4;
+}
+
+/* 버튼 전체 hover 글로우 효과 */
+.action-card.unified-btn:hover {
+  box-shadow: 0 0 30px rgba(200,241,53,0.12);
+}
+
+/* 통계 숫자 카운트업 애니메이션 강화 */
+.stat-num {
+  background: linear-gradient(135deg, #c8f135, #e8ff80);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 섹션 구분선 */
+.why-section, .review-section {
+  position: relative;
+}
+.why-section::before, .review-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 80px; right: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,241,53,0.3), transparent);
+}
+
+/* 카드 hover 효과 강화 */
+.review-card:hover {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,241,53,0.2);
+}
+
+/* CTA 배너 그라데이션 효과 */
+.cta-banner {
+  background: linear-gradient(135deg, #c8f135 0%, #d4f560 50%, #b8e020 100%);
+  box-shadow: 0 40px 100px rgba(200,241,53,0.2);
+  position: relative;
+  overflow: hidden;
+}
+.cta-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* 헤더 글로우 */
+header {
+  box-shadow: 0 1px 40px rgba(0,0,0,0.3);
+}
+
+/* 액션 카드 아이콘 펄스 */
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.unified-btn:hover .action-icon {
+  animation: iconPulse 1s ease infinite;
+}
+
+/* 스크롤바 커스텀 */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: rgba(200,241,53,0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(200,241,53,0.6); }
+
+/* FAQ 강화 */
+.faq-item.open .faq-q {
+  color: var(--lime);
+}
+
+/* 포인트 아이템 hover */
+.point-item {
+  transition: transform 0.2s;
+}
+.point-item:hover {
+  transform: translateX(4px);
+}
+
 </style>
 </head>
 <body>
@@ -826,8 +967,22 @@ footer {
   <a class="header-cta" href="tel:010-3044-1236">📞 즉시 전화 상담</a>
 </header>
 
+<!-- TRUST BANNER -->
+<!-- 신뢰 배너 -->
+<div style="background:linear-gradient(90deg,#1a1f19,#1e251c,#1a1f19);border-bottom:1px solid rgba(200,241,53,0.2);padding:10px 0;text-align:center;position:relative;z-index:998;margin-top:64px;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;font-size:12px;font-weight:700;letter-spacing:0.5px;">
+    <span style="color:var(--lime);">⭐ 누적 상담 2,300건+</span>
+    <span style="color:rgba(255,255,255,0.3);">|</span>
+    <span style="color:var(--lime);">✅ 착수금 0원 · 완전 무료</span>
+    <span style="color:rgba(255,255,255,0.3);">|</span>
+    <span style="color:var(--lime);">🏆 보험사 대비 평균 2.3배 수령</span>
+    <span style="color:rgba(255,255,255,0.3);">|</span>
+    <span style="color:var(--lime);">⚡ 24시간 이내 답변</span>
+  </div>
+</div>
+
 <!-- HERO -->
-<div class="hero">
+<div class="hero" style="margin-top:0;">
   <div class="hero-left">
     <div class="hero-eyebrow">
       ⚡ 독립 손해사정사 · 보험금 전문<br>
@@ -835,14 +990,14 @@ footer {
     </div>
     <h1 class="hero-h1">
       보험금,<br>
-      <span class="lime">혼자 받으면</span><br>
-      손해입니다
+      <span class="lime">제대로 받고</span><br>
+      계신가요?
     </h1>
     <p class="hero-sub">
-      척추·골절·핀 고정 수술 후 보험금,<br>
+      척추·골절·핀 고정·교통사고 보험금,<br>
       보험사 기준으로만 받으셨나요?<br>
-      놓친 금액까지 찾아드립니다.<br>
-      <span style="color:var(--lime);font-weight:700;">보험사 현장 조사 전 상담 꼭 필요합니다</span>
+      독립 손해사정사가 <strong style="color:var(--lime);">놓친 금액까지</strong> 찾아드립니다.<br>
+      <span style="color:var(--lime);font-weight:700;">⚠️ 보험사 현장 조사 전 반드시 상담하세요</span>
     </p>
     <div class="hero-actions">
       <!-- 버튼 1: 30초 무료 진단 -->
@@ -1188,9 +1343,10 @@ footer {
     <div>
       <div class="footer-logo-txt">라임손해사정사무소</div>
       <div class="footer-desc">
-        독립 손해사정사 · 보험금 전문<br>
-        완전 무료 상담 · 착수금 없음<br><br>
-        카카오 채널 상담 가능
+        보험금 청구 전문 독립 손해사정사<br>
+        척추·골절·교통사고·실손보험 전문<br>
+        완전 무료 상담 · 착수금 0원 · 성공보수제<br><br>
+        📞 카카오 채널 24시간 상담 가능
       </div>
       <a class="footer-kakao" href="http://pf.kakao.com/_QImIX/chat" target="_blank">💬 카카오 채널 바로가기</a>
     </div>
@@ -2383,5 +2539,42 @@ function sendToGAS(payload) {
   </div>
 </div>
 
+
+<!-- 모바일 하단 고정 CTA -->
+<div id="floating-cta" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9990;padding:12px 16px;background:linear-gradient(180deg,transparent 0%,rgba(17,20,17,0.98) 30%);backdrop-filter:blur(10px);">
+  <div style="display:flex;gap:10px;max-width:500px;margin:0 auto;">
+    <a href="http://pf.kakao.com/_QImIX/chat" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:#FEE500;color:#111;border-radius:12px;padding:14px;font-size:14px;font-weight:800;text-decoration:none;font-family:'Noto Sans KR',sans-serif;">💬 카카오 무료상담</a>
+    <button onclick="mOpen('ov3')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--lime);color:var(--dark);border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">⚡ 30초 무료진단</button>
+  </div>
+</div>
+<script>
+(function(){
+  var el=document.getElementById('floating-cta');
+  if(window.innerWidth<=900){
+    el.style.display='block';
+    el.style.opacity='0';
+    el.style.transform='translateY(20px)';
+    el.style.transition='opacity 0.3s,transform 0.3s';
+    window.addEventListener('scroll',function(){
+      if(window.scrollY>200){el.style.opacity='1';el.style.transform='translateY(0)';}
+      else{el.style.opacity='0';el.style.transform='translateY(20px)';}
+    });
+  }
+})();
+</script>
+<script>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var utmSrc=params.get('utm_source');
+  var ref=document.referrer;
+  if(utmSrc||(ref&&ref.indexOf('naver')>-1)){
+    var b=document.createElement('div');
+    b.style.cssText='position:fixed;top:64px;left:0;right:0;background:rgba(200,241,53,0.96);color:#111;text-align:center;padding:10px;font-size:13px;font-weight:800;z-index:997;font-family:"Noto Sans KR",sans-serif;';
+    b.innerHTML='🎯 지금 상담하시면 <strong>우선 처리</strong>해드립니다 → <a href="http://pf.kakao.com/_QImIX/chat" target="_blank" style="color:#111;text-decoration:underline;">카카오 바로상담</a>';
+    document.body.appendChild(b);
+    setTimeout(function(){b.style.display='none';},8000);
+  }
+})();
+</script>
 </body>
   </html>
